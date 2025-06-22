@@ -1,9 +1,29 @@
-import React from 'react';
-import { Box, Grid, Typography, TextField, Button, Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Grid, Typography, TextField, Button, Paper, useMediaQuery } from '@mui/material';
 import backgroundImage from '../assets/unsplash.png';
 import logo from '../assets/logo.png';
+import axios from 'axios';
+import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+const Otp = ({email , setEmail}) => {
+  const [otp, setOtp] = useState('');
+  const [message, setMessage] = useState('');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate(); // Initialize useNavigate hook
+  const handleSendOTP = async () => {
+    try {
+      console.log(email, otp);
+      const response = await axios.post('http://localhost:5000/verify-otp', { email, otp });
+      if (response.status === 200) {
+        setMessage('OTP verified successfully!');
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      setMessage('Verification failed. Please check your OTP and try again.');
+    }
+  };
 
-const Otp = () => {
   return (
     <Box
       sx={{
@@ -14,81 +34,68 @@ const Otp = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        p: 2,
+        overflowY: 'hidden',
+        paddingX:'5px'
       }}
     >
-      <Grid container spacing={12} alignItems="center" justifyContent="center">
-        {/* Left Side - Login Box */}
+      <Grid container spacing={2} alignItems="center" justifyContent="center">
         <Grid item xs={12} md={5}>
-          <Paper
-            elevation={3}
-            sx={{
-              minHeight: 360, // Increased height
-              p: 4,
-              borderRadius: 3,
-              backgroundColor: 'rgba(255, 255, 255, 0.2)', // More transparent
-              backdropFilter: 'blur(6px)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography
-                gutterBottom
-                sx={{
-                    fontWeight: 600, // SemiBold
-                    fontSize: '48px',
-                    lineHeight: '64px',
-                    letterSpacing: 0,
-                }}
-                >
-                Welcome Back to <br />
-                <Box component="span" sx={{ color: '#0077cc' }}>
-                    Appit Software
-                </Box>
+          <Paper elevation={3} sx={{
+            minHeight: 360,
+            p: { xs: 2, md: 4 },
+            borderRadius: 3,
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }}>
+            <Typography gutterBottom sx={{
+              fontWeight: 600,
+              fontSize: { xs: '32px', md: '48px' },
+              lineHeight: { xs: '40px', md: '64px' }
+            }}>
+              Welcome Back to <br />
+              <Box component="span" sx={{ color: '#0077cc' }}>Appit Software</Box>
             </Typography>
 
-            <Typography sx={{color:"black"}} variant="body2" color="text.secondary" gutterBottom>
-              Please enter the One-Time Password (OTP) sent to <br/> your registered email.
+            <Typography sx={{ color: "black" }} variant="body2" gutterBottom>
+              Please enter the One Time Password (OTP) sent to your registered email to login
             </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, my: 2 }}>
-            <TextField
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: 2, my: 2 }}>
+              <TextField
                 fullWidth
                 placeholder="Enter your OTP"
                 variant="outlined"
                 size="small"
-            />
-            <Button
-                variant="contained"
-                color="primary"
-                sx={{ borderRadius: 10, textTransform: 'none', whiteSpace: 'nowrap', px: 3 , backgroundColor:"black" }}
-            >
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+              <Button variant="contained" onClick={handleSendOTP} sx={{
+                borderRadius: 10,
+                textTransform: 'none',
+                px: 3,
+                backgroundColor: 'black',
+                width: { xs: '100%', sm: 'auto' }
+              }}>
                 Submit
-            </Button>
+              </Button>
             </Box>
 
+            {message && (
+              <Typography sx={{ mt: 2, color: 'green' }}>{message}</Typography>
+            )}
           </Paper>
         </Grid>
 
-        {/* Right Side - Logo */}
-        <Grid
-          item
-          xs={12}
-          md={5}
-          sx={{
-            textAlign: 'center',
-          }}
-        >
-          <Box>
-            <Box
-              component="img"
-              src={logo}
-              alt="Appit Logo"
-              sx={{ width: 280, mb: 1 }}
-            />
-          </Box>
-        </Grid>
+        {!isMobile && (
+          <Grid item xs={12} md={5} sx={{ textAlign: 'center' }}>
+            <Box>
+              <Box component="img" src={logo} alt="Appit Logo" sx={{ width: 280, mb: 1 }} />
+            </Box>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );

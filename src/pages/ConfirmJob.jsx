@@ -1,0 +1,312 @@
+import React, { useState } from 'react';
+import {
+    Box,
+    Button,
+    Chip,
+    Grid,
+    MenuItem,
+    Select,
+    TextField,
+    Typography,
+    Paper,
+    InputLabel,
+    FormControl,
+    IconButton,
+    Collapse,
+    Checkbox,
+    RadioGroup, FormControlLabel, Radio
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Divider from '@mui/material/Divider';
+import Autocomplete from '@mui/material/Autocomplete';
+import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined'; // MUI icon as logo example
+
+
+import logo from '../assets/logo.png'; // Assuming you have a logo image
+import ScreeningCards from '../components/ScreeningCards';
+import ScreeningQuestionCard from '../components/ScreeningCards';
+
+const skillsList = [
+    'Ux Research', 'Interaction Design', 'Visual Design', 'Information Architecture',
+    'Prototyping', 'Usability Testing', 'Wireframing', 'User Interface Design',
+    'User Journey Mapping', 'User Persona Development', 'Accessibility Design',
+    'Content Strategy', 'Design Systems',
+];
+
+const screeningCategories = [
+    "Education", "Background Check", "Hybrid Word", "Work Experience",
+    "Expertise with skills", "Remote Collaboration", "Career Development",
+    "Project Management", "Communication Skills", "Technical Proficiency",
+    "Time Management", "Team Leadership", "Adaptability", "Custom Question"
+];
+
+
+const ConfirmJob = () => {
+    const [selectedSkills, setSelectedSkills] = useState(skillsList);
+    const [showSeo, setShowSeo] = useState(false); // <-- Add this
+
+    const [selectedCategories, setSelectedCategories] = useState(["Education", "Background Check", "Hybrid Word"]);
+
+    const handleCategoryClick = (category) => {
+        setSelectedCategories((prev) =>
+            prev.includes(category)
+                ? prev.filter((c) => c !== category)
+                : [...prev, category]
+        );
+    };
+
+    const handleRemoveCategory = (category) => {
+        setSelectedCategories((prev) => prev.filter((c) => c !== category));
+    };
+    return (
+        <Box sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+                Confirm Job Settings
+            </Typography>
+
+            <Grid container spacing={1}>
+                <Grid item size={{ xs: 12, md: 8 }}>
+                    <Paper elevation={2} sx={{ p: 2 }}>
+                        <Typography variant="h6" gutterBottom>Applicant Collections</Typography>
+
+                        <Grid container spacing={2}> {/* Inner Grid for Job Details fields */}
+                            <Grid item xs={12} sm={6}>
+                                <TextField fullWidth label="Recieve Applications" defaultValue="" />
+                            </Grid>
+
+                            <Grid item xs={12} sm={6}>
+                                <TextField fullWidth label="Email Address" defaultValue="" />
+                            </Grid>
+
+                        </Grid>
+
+                        <Box mt={3}>
+                            <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+                                Screening questions
+                            </Typography>
+                            <Typography variant="subtitle2" gutterBottom>We recommend adding 3 or more questions. Applicants must answer each question</Typography>
+
+                        </Box>
+
+                        <Box>
+                            {/* Render a ScreeningQuestionCard for each selected category */}
+                            {selectedCategories.map((category) => (
+                                <ScreeningQuestionCard
+                                    key={category}
+                                    question={category}
+                                    onRemove={() => handleRemoveCategory(category)}
+                                />
+                            ))}
+                        </Box>
+
+                        <Grid container spacing={2} mt={2}>
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle1" gutterBottom>
+                                    Add screening questions:
+                                </Typography>
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                    {screeningCategories.map((category) => (
+                                        <Button
+                                            key={category}
+                                            variant={selectedCategories.includes(category) ? "contained" : "outlined"}
+                                            color={selectedCategories.includes(category) ? "secondary" : "inherit"}
+                                            startIcon={selectedCategories.includes(category) ? "✓" : "+"}
+                                            onClick={() => handleCategoryClick(category)}
+                                            sx={{
+                                                borderRadius: 5,
+                                                textTransform: 'none',
+                                                fontWeight: 500,
+                                                background: selectedCategories.includes(category) ? "#222" : "transparent",
+                                                color: selectedCategories.includes(category) ? "#fff" : "#222",
+                                                borderColor: "#bbb",
+                                                px: 2,
+                                                py: 0.5,
+                                                minWidth: 0
+                                            }}
+                                        >
+                                            {category}
+                                        </Button>
+                                    ))}
+                                </Box>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container mt={2} spacing={2}>
+                            {/* Qualification setting title */}
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle1" fontWeight="bold">
+                                    Qualification setting
+                                </Typography>
+                            </Grid>
+
+                            {/* Checkbox with helper text and tooltip */}
+                            <Grid item xs={12} container alignItems="center">
+                                <Grid item>
+                                    <Checkbox />
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="body2">
+                                        Filter out and send rejections to applicants who don’t meet any must-have qualifications.
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <IconButton size="small">
+                                        <span style={{ fontSize: 15, fontWeight: 'bold', color: '#888' }}>?</span>
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                            <Grid container alignItems={"center"} spacing={2}>
+                                {/* Platform selection title */}
+                                <Grid item xs={12} mt={2}>
+                                    <Typography variant="subtitle2" fontWeight="bold">
+                                        Select the platform you’d like to post this job on:
+                                    </Typography>
+                                </Grid>
+
+                                {/* Radio group for platform selection */}
+                                <Grid item xs={12}>
+                                    <FormControl>
+                                        <RadioGroup row>
+                                            <FormControlLabel value="workisy" control={<Radio />} label="Workisy" />
+                                            <FormControlLabel value="appit" control={<Radio />} label="Appit Software" />
+                                            <FormControlLabel value="both" control={<Radio />} label="Both" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <Box mt={3} mb={3}>
+                            <Paper variant="outlined" sx={{ p: 0 }}>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        px: 2,
+                                        py: 1,
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => setShowSeo((prev) => !prev)}
+                                >
+                                    <Typography variant="subtitle1" fontWeight="bold">
+                                        SEO Settings
+                                    </Typography>
+                                    <IconButton size="small">
+                                        <ExpandMoreIcon
+                                            sx={{
+                                                transform: showSeo ? 'rotate(180deg)' : 'rotate(0deg)',
+                                                transition: 'transform 0.2s',
+                                            }}
+                                        />
+                                    </IconButton>
+                                </Box>
+                                <Collapse in={showSeo}>
+                                    <Box sx={{ p: 2 }}>
+                                        <TextField
+                                            fullWidth
+                                            label="Meta Title"
+                                            required
+                                            margin="normal"
+                                        />
+                                        <TextField
+                                            fullWidth
+                                            label="URL"
+                                            required
+                                            margin="normal"
+                                        />
+                                        <TextField
+                                            fullWidth
+                                            label="Meta Description"
+                                            required
+                                            multiline
+                                            minRows={3}
+                                            margin="normal"
+                                        />
+                                    </Box>
+                                </Collapse>
+                            </Paper>
+                        </Box>
+
+                        <Divider />
+
+                        <Grid container mt={2} >
+                            <Grid item size={{ xs: 12, md: 4 }}>
+                                <Button sx={{ textTransform: 'none' }}>Preview</Button>
+                            </Grid>
+                            <Grid item size={{ xs: 12, md: 8 }} justifyContent={'flex-end'} display="flex">
+                                <Button sx={{ textTransform: 'none' }}>Back</Button>
+                                <Button sx={{ textTransform: 'none' }}>Post Job</Button>
+
+                            </Grid>
+                        </Grid>
+
+
+                    </Paper>
+                </Grid>
+
+                {/* Sidebar - takes 4 columns on md and up, full width on xs */}
+                <Grid item size={{ xs: 12, md: 4 }}>
+                    <Grid container spacing={2} direction="column">
+                        {/* Job Preview */}
+                        <Grid item>
+                            <Paper elevation={2} sx={{ p: 1, mb: 1 }}>
+                                <Grid container alignItems="center" spacing={2}>
+                                    <Grid item><img src={logo} width={60} /></Grid>
+                                    <Grid item>
+                                        <Typography variant="subtitle1">User Experience Designer</Typography>
+                                        <Typography variant="body2">APPIT Software Inc</Typography>
+                                        <Typography variant="body2">Telangana, India (On-site)</Typography>
+                                        <Typography variant="caption" sx={{ color: 'gray' }}>Save as Draft</Typography>
+                                    </Grid>
+                                </Grid>
+
+                            </Paper>
+                        </Grid>
+
+                        {/* Skills */}
+                        <Grid item>
+                            <Paper elevation={2} sx={{ p: 2 }}>
+                                <Grid container direction="column" spacing={2}>
+                                    <Grid item>
+                                        <LightbulbOutlinedIcon sx={{ fontSize: 28, color: '#888' }} />
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography variant="subtitle2" fontWeight="bold">
+                                            Why use screening questions?
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            color="text.secondary"
+                                            sx={{ fontSize: '0.7rem' }} // or any size you prefer
+                                        >
+                                            Your job post is targeted to people who match your requirements, and you'll be notified of applicants who pass your screening questions.
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography variant="subtitle2" fontWeight="bold">
+                                            Will my network know that I’m hiring?
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.7rem' }} >
+                                            When you post your job, we’ll notify your network that you’re hiring to help increase your job post’s visibility. Your network can choose to share your job post to help you reach qualified candidates.
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography variant="subtitle2" fontWeight="bold">
+                                            What information can applicants see about me and my job?
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.7rem' }} >
+                                            When you post your job, you agree to share details about your job such as company size and location, as well as information around when you created your LinkedIn profile.
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Box>
+    );
+};
+
+export default ConfirmJob;

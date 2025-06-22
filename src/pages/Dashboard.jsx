@@ -3,7 +3,8 @@ import {
   Box, Drawer, CssBaseline, Toolbar, List, Divider, ListItem,
   ListItemButton, ListItemIcon, ListItemText, Typography, Table, TableBody,
   TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField
-, InputAdornment} from '@mui/material';
+  , InputAdornment, FormControl, Select, MenuItem 
+} from '@mui/material';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import WorkIcon from '@mui/icons-material/Work';
@@ -17,12 +18,19 @@ import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
-
-
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import Post from '../components/Post';
+import Confirm from '../components/Confirm';
+import CreateUser from '../components/tables/CreateUser';
+import ViewJobsTable from '../components/tables/ViewJobsTable';
+import ApplicationTable from '../components/tables/ApplicationTable';
 
 const drawerWidth = 240;
 
-const DrawerSection = ({ title, icon, items, onItemClick }) => (
+const DrawerSection = ({ title, icon, items, onItemClick, selectedSection }) => (
   <>
     <Box
       sx={{
@@ -51,7 +59,12 @@ const DrawerSection = ({ title, icon, items, onItemClick }) => (
     <List dense>
       {items.map((item) => (
         <ListItem key={item} disablePadding>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => onItemClick(item)}>
+          <ListItemButton sx={{
+            pl: 4,
+            backgroundColor: selectedSection === item ? '#e0e0e0' : 'inherit',
+            borderRadius: 2,
+          }}
+            onClick={() => onItemClick(item)}>
             <ListItemText primary={item} />
           </ListItemButton>
         </ListItem>
@@ -60,397 +73,47 @@ const DrawerSection = ({ title, icon, items, onItemClick }) => (
   </>
 );
 
-const jobData = [
-  { id: 1, name: 'UI UX Designer', source: 'Appit Software', apps: 8, postedBy: 'Sai kiran', date: '16-08-2025' },
-  { id: 2, name: 'Product Manager', source: 'Workisy, Appit software', apps: 9, postedBy: 'Aditi Sharma', date: '15-09-2025' },
-  { id: 3, name: 'Front-end Developer', source: 'Appit Software', apps: 30, postedBy: 'Mark Johnson', date: '22-10-2025' },
-  { id: 4, name: 'Data Analyst', source: 'Appit Software', apps: 19, postedBy: 'Anita Gupta', date: '05-11-2025' },
-  { id: 5, name: 'Backend Developer', source: 'Workisy, Appit software', apps: 20, postedBy: 'Vikram Singh', date: '30-12-2025' },
-];
-
-function ViewJobsTable() {
-  return (
-    <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-        <Button variant="contained" sx={{ borderRadius: 5, backgroundColor: '#055087' }}>
-          Career
-        </Button>
-        <Typography fontWeight="bold">{'>'}</Typography>
-        <Button variant="contained" sx={{ borderRadius: 5, backgroundColor: '#055087' }}>
-          View Jobs
-        </Button>
-      </Box>
-
-      
-      {/* Filter Row */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          mb: 2,
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-          <Button
-            variant="contained"
-            startIcon={<FilterAltIcon />}
-            sx={{
-              backgroundColor: '#0066B2',
-              textTransform: 'none',
-              borderRadius: 2,
-              px: 2,
-              fontWeight: 500,
-            }}
-          >
-            Filters
-          </Button>
-
-          <TextField
-            variant="outlined"
-            placeholder="Search"
-            size="small"
-            sx={{
-              borderRadius: 2,
-              width: 250,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            sx={{
-              backgroundColor: '#0057D9',
-              textTransform: 'none',
-              borderRadius: 2,
-              px: 2,
-              fontWeight: 500,
-            }}
-          >
-            Post a job
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<RefreshIcon />}
-            sx={{ textTransform: 'none', borderRadius: 2, px: 2, fontWeight: 500 }}
-          >
-            Reload
-          </Button>
-        </Box>
-      </Box>
-
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="job table">
-          <TableHead>
-            <TableRow sx={{ backgroundColor: '#E6F1FD' }}>
-              <TableCell>Sl No</TableCell>
-              <TableCell>Job Name</TableCell>
-              <TableCell>Source</TableCell>
-              <TableCell>Applications</TableCell>
-              <TableCell>Posted by</TableCell>
-              <TableCell>Posted date</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {jobData.map((job, index) => (
-              <TableRow
-                key={job.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell>{String(index + 1).padStart(2, '0')}</TableCell>
-                <TableCell>{job.name}</TableCell>
-                <TableCell>{job.source}</TableCell>
-                <TableCell>
-                  {String(job.apps).padStart(2, '0')} Applications{' '}
-                  <Typography
-                    component="span"
-                    sx={{ color: '#0057D9', cursor: 'pointer', ml: 1 }}
-                  >
-                    (View)
-                  </Typography>
-                </TableCell>
-                <TableCell>{job.postedBy}</TableCell>
-                <TableCell>{job.date}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
-}
-
-function ApplicationTable() {
-  return (
-    <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-        <Button variant="contained" sx={{ borderRadius: 5, backgroundColor: '#055087' }}>
-          Career
-        </Button>
-        <Typography fontWeight="bold">{'>'}</Typography>
-        <Button variant="contained" sx={{ borderRadius: 5, backgroundColor: '#055087' }}>
-          Applications
-        </Button>
-      </Box>
-
-      
-      {/* Filter Row */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          mb: 2,
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-          <Button
-            variant="contained"
-            startIcon={<FilterAltIcon />}
-            sx={{
-              backgroundColor: '#0066B2',
-              textTransform: 'none',
-              borderRadius: 2,
-              px: 2,
-              fontWeight: 500,
-            }}
-          >
-            Filters
-          </Button>
-
-          <TextField
-            variant="outlined"
-            placeholder="Search"
-            size="small"
-            sx={{
-              borderRadius: 2,
-              width: 250,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            sx={{
-              backgroundColor: '#0057D9',
-              textTransform: 'none',
-              borderRadius: 2,
-              px: 2,
-              fontWeight: 500,
-            }}
-          >
-            Create New
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<RefreshIcon />}
-            sx={{ textTransform: 'none', borderRadius: 2, px: 2, fontWeight: 500 }}
-          >
-            Export
-          </Button>
-                    <Button
-            variant="outlined"
-            startIcon={<RefreshIcon />}
-            sx={{ textTransform: 'none', borderRadius: 2, px: 2, fontWeight: 500 }}
-          >
-            Reload
-          </Button>
-                    <Button
-            variant="outlined"
-            startIcon={<RefreshIcon />}
-            sx={{ textTransform: 'none', borderRadius: 2, px: 2, fontWeight: 500 }}
-          >
-            Delete
-          </Button>
-        </Box>
-      </Box>
-
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="job table">
-          <TableHead>
-            <TableRow sx={{ backgroundColor: '#E6F1FD' }}>
-              <TableCell>Application Name</TableCell>
-              <TableCell>Applied Job</TableCell>
-              <TableCell>Applied date</TableCell>
-              <TableCell>Mobile number</TableCell>
-              <TableCell>AI Score</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {jobData.map((job, index) => (
-              <TableRow
-                key={job.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell>{String(index + 1).padStart(2, '0')}</TableCell>
-                <TableCell>{job.name}</TableCell>
-                <TableCell>{job.source}</TableCell>
-                <TableCell>
-                  {String(job.apps).padStart(2, '0')} Applications{' '}
-                  <Typography
-                    component="span"
-                    sx={{ color: '#0057D9', cursor: 'pointer', ml: 1 }}
-                  >
-                    (View)
-                  </Typography>
-                </TableCell>
-                <TableCell>{job.postedBy}</TableCell>
-                <TableCell>{job.date}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
-}
-
-function CreateUser() {
-  return (
-    <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-        <Button variant="contained" sx={{ borderRadius: 5, backgroundColor: '#055087' }}>
-          Career
-        </Button>
-        <Typography fontWeight="bold">{'>'}</Typography>
-        <Button variant="contained" sx={{ borderRadius: 5, backgroundColor: '#055087' }}>
-          Applications
-        </Button>
-      </Box>
-
-      
-      {/* Filter Row */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          mb: 2,
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-          <Button
-            variant="contained"
-            startIcon={<FilterAltIcon />}
-            sx={{
-              backgroundColor: '#0066B2',
-              textTransform: 'none',
-              borderRadius: 2,
-              px: 2,
-              fontWeight: 500,
-            }}
-          >
-            Filters
-          </Button>
-
-          <TextField
-            variant="outlined"
-            placeholder="Search"
-            size="small"
-            sx={{
-              borderRadius: 2,
-              width: 250,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            sx={{
-              backgroundColor: '#0057D9',
-              textTransform: 'none',
-              borderRadius: 2,
-              px: 2,
-              fontWeight: 500,
-            }}
-          >
-            Create New
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<RefreshIcon />}
-            sx={{ textTransform: 'none', borderRadius: 2, px: 2, fontWeight: 500 }}
-          >
-            Import Data
-          </Button>
-        </Box>
-      </Box>
-
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="job table">
-          <TableHead>
-            <TableRow sx={{ backgroundColor: '#E6F1FD' }}>
-              <TableCell>ID</TableCell>
-              <TableCell>Avatar</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Created At</TableCell>
-              <TableCell>Operations</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {jobData.map((job, index) => (
-              <TableRow
-                key={job.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell>{String(index + 1).padStart(2, '0')}</TableCell>
-                <TableCell>{job.name}</TableCell>
-                <TableCell>{job.source}</TableCell>
-                <TableCell>
-                  {String(job.apps).padStart(2, '0')} Applications{' '}
-                  <Typography
-                    component="span"
-                    sx={{ color: '#0057D9', cursor: 'pointer', ml: 1 }}
-                  >
-                    (View)
-                  </Typography>
-                </TableCell>
-                <TableCell>{job.postedBy}</TableCell>
-                <TableCell>{job.date}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
-}
-
 export default function Dashboard() {
   const [selectedSection, setSelectedSection] = useState('');
+  const [nextClicked, setNextClicked] = useState(false);
+  const [errors, setErrors] = useState({});
+  const requiredFields = [
+    'jobTitle', 'company', 'workType', 'jobLocation', 'jobType', 'description',
+    'metaTitle', 'url', 'metaDescription'
+  ];
+  const [form, setForm] = useState({
+    jobTitle: '',
+    company: '',
+    workType: 'On-site',
+    jobLocation: '',
+    jobType: 'Full-time',
+    description: '',
+    metaTitle: '',
+    url: '',
+    metaDescription: '',
+    filterOut: false,
+    platform: "",
+    customQuestion:"",
+    selectedSkills:[],
+    screeningCategories: ["Education", "Background Check", "Hybrid Word"], // <-- add this
+  });
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    console.log('Validating form:', form);
+    requiredFields.forEach(field => {
+      if (!form[field] || form[field].trim() === '') {
+        newErrors[field] = true;
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -484,6 +147,7 @@ export default function Dashboard() {
           icon={<DashboardIcon sx={{ color: 'white' }} />}
           items={[]}
           onItemClick={setSelectedSection}
+          selectedSection={selectedSection}
         />
 
         <DrawerSection
@@ -491,6 +155,7 @@ export default function Dashboard() {
           icon={<WorkIcon sx={{ color: 'white' }} />}
           items={['Add Jobs', 'View Jobs', 'Applications']}
           onItemClick={setSelectedSection}
+          selectedSection={selectedSection}
         />
 
         <DrawerSection
@@ -498,6 +163,7 @@ export default function Dashboard() {
           icon={<PeopleIcon sx={{ color: 'white' }} />}
           items={['Users', 'Data Base', 'Contact']}
           onItemClick={setSelectedSection}
+          selectedSection={selectedSection}
         />
 
         <DrawerSection
@@ -505,6 +171,7 @@ export default function Dashboard() {
           icon={<FolderIcon sx={{ color: 'white' }} />}
           items={['Blogs', 'Job Applications', 'Contact']}
           onItemClick={setSelectedSection}
+          selectedSection={selectedSection}
         />
 
         <DrawerSection
@@ -512,6 +179,7 @@ export default function Dashboard() {
           icon={<AddBoxIcon sx={{ color: 'white' }} />}
           items={['Create User']}
           onItemClick={setSelectedSection}
+          selectedSection={selectedSection}
         />
 
         <Divider sx={{ my: 2 }} />
@@ -538,8 +206,16 @@ export default function Dashboard() {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         {(selectedSection === 'View Jobs' && <ViewJobsTable />) ||
-         (selectedSection === 'Applications' && <ApplicationTable />) ||
-         (selectedSection === 'Create User' && <CreateUser />)}
+          (selectedSection === 'Applications' && <ApplicationTable />) ||
+          (selectedSection === 'Create User' && <CreateUser />) ||
+          (selectedSection === 'Add Jobs' && (
+            nextClicked
+              ? <Confirm form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate}/>
+              : <Post nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate}/>
+          ))
+        }
+
+
       </Box>
     </Box>
   );
