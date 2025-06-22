@@ -10,9 +10,12 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import CreateUserModal from '../modals/CreateUserModal';
 export default function CreateUser() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [openModal, setOpenModal] = useState(false);
+
 
     useEffect(() => {
         fetch('http://localhost:5000/get-users')
@@ -23,6 +26,11 @@ export default function CreateUser() {
             })
             .catch(() => setLoading(false));
     }, []);
+
+    const handleCreateUser = (newUser) => {
+        setUsers(prev => [...prev, { ...newUser, id: Date.now() }]);
+        // Optionally, send to backend here
+    };
 
     return (
         <Box>
@@ -90,6 +98,7 @@ export default function CreateUser() {
                             px: 2,
                             fontWeight: 500,
                         }}
+                        onClick={() => setOpenModal(true)}
                     >
                         Create New
                     </Button>
@@ -142,8 +151,8 @@ export default function CreateUser() {
                                     </TableCell>
                                     <TableCell>
                                         {/* Add operation buttons here */}
-                                        <EditIcon/>
-                                        <DeleteIcon/>
+                                        <EditIcon />
+                                        <DeleteIcon />
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -151,6 +160,11 @@ export default function CreateUser() {
                     </TableBody>
                 </Table>
             </TableContainer>
+             <CreateUserModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                onCreate={handleCreateUser}
+            />
         </Box>
     );
 }

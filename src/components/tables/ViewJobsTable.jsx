@@ -12,7 +12,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function ViewJobsTable() {
+export default function ViewJobsTable({setViewButtonClicked, viewButtonClicked}) {
     const [hoveredRow, setHoveredRow] = useState(null);
     const [search, setSearch] = useState("");
     const [jobs, setJobs] = useState([]);
@@ -25,12 +25,17 @@ export default function ViewJobsTable() {
             const data = await res.json();
             if (data.success) {
                 setJobs(data.jobs);
+                console.log('view table jobs', data.jobs);
             }
         } catch (err) {
             // Handle error as needed
         }
         setLoading(false);
     };
+
+    useEffect(() => {
+        console.log('View button clicked:', viewButtonClicked);
+    }, [viewButtonClicked]);
 
     useEffect(() => {
         fetchJobs();
@@ -162,6 +167,7 @@ export default function ViewJobsTable() {
                                     <Typography
                                         component="span"
                                         sx={{ color: '#0057D9', cursor: 'pointer', ml: 1 }}
+                                        onClick={() => setViewButtonClicked(true)}
                                     >
                                         (View)
                                     </Typography>

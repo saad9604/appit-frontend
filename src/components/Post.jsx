@@ -17,7 +17,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Divider from '@mui/material/Divider';
 import Autocomplete from '@mui/material/Autocomplete';
-
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import logo from '../assets/logo.png'; // Assuming you have a logo image
 
 const skillsList = [
@@ -27,7 +27,7 @@ const skillsList = [
   'Content Strategy', 'Design Systems',
 ];
 
-const Post = ({setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) => {
+const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [showSeo, setShowSeo] = useState(false); // <-- Add this
 
@@ -36,7 +36,7 @@ const Post = ({setBackClicked, nextClicked, setNextClicked, form, setForm, handl
     'metaTitle', 'url', 'metaDescription'
   ];
 
-  const handleClick =()=>{
+  const handleClick = () => {
     if (validate()) {
       setBackClicked(false);
       setNextClicked(true);
@@ -98,6 +98,7 @@ const Post = ({setBackClicked, nextClicked, setNextClicked, form, setForm, handl
                     value={form.workType}
                     label="Work Type"
                     onChange={handleChange}
+                    variant='standard'
                   >
                     <MenuItem value="On-site">On-site</MenuItem>
                     <MenuItem value="Remote">Remote</MenuItem>
@@ -126,6 +127,7 @@ const Post = ({setBackClicked, nextClicked, setNextClicked, form, setForm, handl
                     value={form.jobType}
                     label="Job Type"
                     onChange={handleChange}
+                    variant='standard'
                   >
                     <MenuItem value="Full-time">Full-time</MenuItem>
                     <MenuItem value="Part-time">Part-time</MenuItem>
@@ -138,7 +140,20 @@ const Post = ({setBackClicked, nextClicked, setNextClicked, form, setForm, handl
             </Grid>
 
             <Box mt={3}>
-              <Button variant="contained" sx={{ background: 'linear-gradient(to right, #6a11cb, #2575fc)' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  background: 'linear-gradient(90deg, #2931EF 0%, #C219C0 100%)',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  boxShadow: 'none',
+                  textTransform: 'none',
+                  '&:hover': {
+                    background: 'linear-gradient(90deg, #2931EF 0%, #C219C0 100%)',
+                    opacity: 0.95,
+                  },
+                }}
+              >
                 Write Description with AI
               </Button>
             </Box>
@@ -300,6 +315,30 @@ const Post = ({setBackClicked, nextClicked, setNextClicked, form, setForm, handl
                     />
                   ))}
                 </Box>
+              </Paper>
+            </Grid>
+
+            <Grid item>
+              <Paper elevation={2} sx={{ p: 2 }}>
+                <Grid container spacing={1} direction="column">
+                  <Grid item><TipsAndUpdatesIcon /></Grid>
+                  <Grid item>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ fontWeight: 600, fontSize: '0.95rem', color: 'gray' }}
+                    >
+                      Target your jobs to the right people
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontSize: '0.8rem', color: 'gray' }}
+                    >
+                      Include a job description and add required skills to target job seekers who match your criteria
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Paper>
             </Grid>
           </Grid>

@@ -83,12 +83,14 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
 
     const postJob = async () => {
         try {
-            console.log('Posting job with form data:', form);
-            const response = await axios.post('http://localhost:5000/post-job', form);
-            console.log('Response from server:', response.data);
-            if (response.data.success === true) {
-                console.log('Job posted successfully:', response.data);
-                setOpen(true); // Show modal on success
+            if (validate()) {
+                console.log('Posting job with form data:', form);
+                const response = await axios.post('http://localhost:5000/post-job', form);
+                console.log('Response from server:', response.data);
+                if (response.data.success === true) {
+                    console.log('Job posted successfully:', response.data);
+                    setOpen(true); // Show modal on success
+                }
             }
         } catch (error) {
             console.error('Failed to post job:', error);
@@ -130,16 +132,23 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
 
                         <Grid container spacing={2}> {/* Inner Grid for Job Details fields */}
                             <Grid item size={{ xs: 12, sm: 6 }}>
-                                <TextField
-                                    fullWidth
-                                    label="Recieve Applications"
-                                    name="receiveApplications"
-                                    value={form.receiveApplications || ""}
-                                    onChange={handleChange}
-                                    error={!!errors.receiveApplications}
-                                    helperText={errors.receiveApplications && "Required"}
-                                    variant="standard"
-                                />
+                                <FormControl fullWidth variant="standard" error={!!errors.receiveApplications}>
+                                    <InputLabel>Receive Applications</InputLabel>
+                                    <Select
+                                        label="Receive Applications"
+                                        name="receiveApplications"
+                                        value={form.receiveApplications || "email"}
+                                        onChange={handleChange}
+                                        defaultValue={"email"}
+                                    >
+                                        <MenuItem value="email">Email</MenuItem>
+                                    </Select>
+                                    {errors.receiveApplications && (
+                                        <Typography color="error" variant="caption">
+                                            Required
+                                        </Typography>
+                                    )}
+                                </FormControl>
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -147,6 +156,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                                     fullWidth
                                     label="Email Address"
                                     name="emailAddress"
+                                    type="email"
                                     value={form.emailAddress || ""}
                                     onChange={handleChange}
                                     error={!!errors.emailAddress}
@@ -359,16 +369,13 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
 
                     </Paper>
                 </Grid>
-
-                {/* Sidebar - takes 4 columns on md and up, full width on xs */}
                 <Grid item size={{ xs: 12, md: 4 }} sx={{
                     position: { md: 'sticky' },
-                    top: { md: 16 }, // adjust as needed for your header
+                    top: { md: 16 },
                     alignSelf: 'flex-start',
                     height: 'fit-content',
                 }}>
                     <Grid container spacing={2} direction="column">
-                        {/* Job Preview */}
                         <Grid item>
                             <Paper elevation={2} sx={{ p: 1, mb: 1 }}>
                                 <Grid container alignItems="center" spacing={2}>
@@ -383,8 +390,6 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
 
                             </Paper>
                         </Grid>
-
-                        {/* Skills */}
                         <Grid item>
                             <Paper elevation={2} sx={{ p: 2 }}>
                                 <Grid container direction="column" spacing={2}>
@@ -398,7 +403,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                                         <Typography
                                             variant="body2"
                                             color="text.secondary"
-                                            sx={{ fontSize: '0.7rem' }} // or any size you prefer
+                                            sx={{ fontSize: '0.7rem' }}
                                         >
                                             Your job post is targeted to people who match your requirements, and you'll be notified of applicants who pass your screening questions.
                                         </Typography>

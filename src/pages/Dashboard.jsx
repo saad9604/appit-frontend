@@ -70,7 +70,7 @@ export default function Dashboard() {
   const [selectedSection, setSelectedSection] = useState('');
   const [nextClicked, setNextClicked] = useState(false);
   const [backClicked, setBackClicked] = useState(false);
-
+  const [viewButtonClicked, setViewButtonClicked] = useState(false);
   const [errors, setErrors] = useState({});
   const requiredFields = [
     'jobTitle', 'company', 'workType', 'jobLocation', 'jobType', 'description',
@@ -264,18 +264,16 @@ export default function Dashboard() {
       </Drawer>
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {(selectedSection === 'View Jobs' && <ViewJobsTable />) ||
+        {(selectedSection === 'View Jobs' && <ViewJobsTable setViewButtonClicked={setViewButtonClicked} viewButtonClicked={viewButtonClicked}/>) ||
           (selectedSection === 'Applications' && <ApplicationTable />) ||
           (selectedSection === 'Create User' && <CreateUser />) ||
-          // ...existing code...
           (selectedSection === 'Add Jobs' && (
             backClicked
               ? <Post setBackClicked={setBackClicked} nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
               : nextClicked
                 ? <Confirm setNextClicked={setNextClicked} setBackClicked={setBackClicked} backClicked={backClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
                 : <Post setBackClicked={setBackClicked} nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
-          ))
-          // ...existing code...
+          )) 
         }
 
 
