@@ -27,7 +27,7 @@ const skillsList = [
   'Content Strategy', 'Design Systems',
 ];
 
-const Post = ({ nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) => {
+const Post = ({setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [showSeo, setShowSeo] = useState(false); // <-- Add this
 
@@ -35,6 +35,13 @@ const Post = ({ nextClicked, setNextClicked, form, setForm, handleChange, errors
     'jobTitle', 'company', 'workType', 'jobLocation', 'jobType', 'description',
     'metaTitle', 'url', 'metaDescription'
   ];
+
+  const handleClick =()=>{
+    if (validate()) {
+      setBackClicked(false);
+      setNextClicked(true);
+    }
+  }
 
 
 
@@ -228,11 +235,7 @@ const Post = ({ nextClicked, setNextClicked, form, setForm, handleChange, errors
                 <Button sx={{ textTransform: 'none' }}>Back</Button>
                 <Button
                   sx={{ textTransform: 'none' }}
-                  onClick={() => {
-                    if (validate()) {
-                      setNextClicked(true);
-                    }
-                  }}
+                  onClick={handleClick}
                 >
                   Next
                 </Button>

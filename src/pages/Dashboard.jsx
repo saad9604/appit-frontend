@@ -3,7 +3,7 @@ import {
   Box, Drawer, CssBaseline, Toolbar, List, Divider, ListItem,
   ListItemButton, ListItemIcon, ListItemText, Typography, Table, TableBody,
   TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField
-  , InputAdornment, FormControl, Select, MenuItem 
+  , InputAdornment, FormControl, Select, MenuItem
 } from '@mui/material';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -14,14 +14,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import FolderIcon from '@mui/icons-material/Folder';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import logo from '../assets/logo.png';
-import AddIcon from '@mui/icons-material/Add';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import SearchIcon from '@mui/icons-material/Search';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 import Post from '../components/Post';
 import Confirm from '../components/Confirm';
 import CreateUser from '../components/tables/CreateUser';
@@ -76,6 +69,8 @@ const DrawerSection = ({ title, icon, items, onItemClick, selectedSection }) => 
 export default function Dashboard() {
   const [selectedSection, setSelectedSection] = useState('');
   const [nextClicked, setNextClicked] = useState(false);
+  const [backClicked, setBackClicked] = useState(false);
+
   const [errors, setErrors] = useState({});
   const requiredFields = [
     'jobTitle', 'company', 'workType', 'jobLocation', 'jobType', 'description',
@@ -93,8 +88,8 @@ export default function Dashboard() {
     metaDescription: '',
     filterOut: false,
     platform: "",
-    customQuestion:"",
-    selectedSkills:[],
+    customQuestion: "",
+    selectedSkills: [],
     screeningCategories: ["Education", "Background Check", "Hybrid Word"], // <-- add this
   });
 
@@ -114,6 +109,70 @@ export default function Dashboard() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+  const drawerContent = (
+    <>
+      <Toolbar sx={{ justifyContent: 'center', p: 7 }}>
+        <Box component="img" src={logo} alt="Appit Logo" sx={{ width: 90 }} />
+      </Toolbar>
+      <Divider />
+      {/* ...DrawerSection components... */}
+      <DrawerSection
+        title="Dashboard"
+        icon={<DashboardIcon sx={{ color: 'white' }} />}
+        items={[]}
+        onItemClick={setSelectedSection}
+        selectedSection={selectedSection}
+      />
+      <DrawerSection
+        title="Career"
+        icon={<WorkIcon sx={{ color: 'white' }} />}
+        items={['Add Jobs', 'View Jobs', 'Applications']}
+        onItemClick={setSelectedSection}
+        selectedSection={selectedSection}
+      />
+      <DrawerSection
+        title="Workisy"
+        icon={<PeopleIcon sx={{ color: 'white' }} />}
+        items={['Users', 'Data Base', 'Contact']}
+        onItemClick={setSelectedSection}
+        selectedSection={selectedSection}
+      />
+      <DrawerSection
+        title="Appit Software"
+        icon={<FolderIcon sx={{ color: 'white' }} />}
+        items={['Blogs', 'Job Applications', 'Contact']}
+        onItemClick={setSelectedSection}
+        selectedSection={selectedSection}
+      />
+      <DrawerSection
+        title="User creation"
+        icon={<AddBoxIcon sx={{ color: 'white' }} />}
+        items={['Create User']}
+        onItemClick={setSelectedSection}
+        selectedSection={selectedSection}
+      />
+      <Divider sx={{ my: 2 }} />
+      <List dense>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Log Out" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </>
+  );
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -208,11 +267,15 @@ export default function Dashboard() {
         {(selectedSection === 'View Jobs' && <ViewJobsTable />) ||
           (selectedSection === 'Applications' && <ApplicationTable />) ||
           (selectedSection === 'Create User' && <CreateUser />) ||
+          // ...existing code...
           (selectedSection === 'Add Jobs' && (
-            nextClicked
-              ? <Confirm form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate}/>
-              : <Post nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate}/>
+            backClicked
+              ? <Post setBackClicked={setBackClicked} nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
+              : nextClicked
+                ? <Confirm setNextClicked={setNextClicked} setBackClicked={setBackClicked} backClicked={backClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
+                : <Post setBackClicked={setBackClicked} nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
           ))
+          // ...existing code...
         }
 
 

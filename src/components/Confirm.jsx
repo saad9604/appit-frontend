@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Button,
@@ -26,6 +26,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import logo from '../assets/logo.png'; // Assuming you have a logo image
 import ScreeningCards from '../components/ScreeningCards';
 import ScreeningQuestionCard from '../components/ScreeningCards';
+import Joblink from './JobLink.jsx/Joblink';
 
 const skillsList = [
     'Ux Research', 'Interaction Design', 'Visual Design', 'Information Architecture',
@@ -42,11 +43,13 @@ const screeningCategories = [
 ];
 
 
-const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate }) => {
+const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, backClicked, setBackClicked, setNextClicked }) => {
     const [selectedSkills, setSelectedSkills] = useState(skillsList);
     const [showSeo, setShowSeo] = useState(false); // <-- Add this
     const [customQuestion, setCustomQuestion] = useState(form.customQuestion || "");
     const [customidealAnswer, setCustomIdealAnswer] = useState("Yes");
+    const [jobLinks, setJobLinks] = useState([]);
+    const [open, setOpen] = useState(false); // Add this for modal control
 
     const selectedCategories = form.screeningCategories || ["Education", "Background Check", "Hybrid Word"];
     const handleCategoryClick = (category) => {
@@ -82,13 +85,30 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate }) =
         try {
             console.log('Posting job with form data:', form);
             const response = await axios.post('http://localhost:5000/post-job', form);
-            if (response.status === 200) {
+            console.log('Response from server:', response.data);
+            if (response.data.success === true) {
                 console.log('Job posted successfully:', response.data);
+                setOpen(true); // Show modal on success
             }
         } catch (error) {
             console.error('Failed to post job:', error);
         }
     };
+
+    useEffect(() => {
+        if (form.platform === "workisy") {
+            setJobLinks(["https://workisy.com/jobs"]);
+        } else if (form.platform === "appit") {
+            setJobLinks(["https://www.appitsoftware.com/jobs"]);
+        } else if (form.platform === "both") {
+            setJobLinks([
+                "https://workisy.com/jobs",
+                "https://www.appitsoftware.com/jobs"
+            ]);
+        } else {
+            setJobLinks([]);
+        }
+    }, [form.platform]);
     return (
         <Box sx={{ p: 3 }}>
 
@@ -105,7 +125,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate }) =
                         <Divider />
                         <Typography gutterBottom sx={{
                             fontWeight: 500,
-                            letterSpacing: '0.21px', mt:2
+                            letterSpacing: '0.21px', mt: 2
                         }}>Applicant Collections</Typography>
 
                         <Grid container spacing={2}> {/* Inner Grid for Job Details fields */}
@@ -213,7 +233,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate }) =
                                         Filter out and send rejections to applicants who don’t meet any must-have qualifications.
                                     </Typography>
                                     <IconButton size="small">
-                                        <HelpIcon/>
+                                        <HelpIcon />
                                     </IconButton>
                                 </Box>
                             </Grid>
@@ -322,7 +342,10 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate }) =
                                 <Button sx={{ textTransform: 'none' }}>Preview</Button>
                             </Grid>
                             <Grid item size={{ xs: 12, md: 8 }} justifyContent={'flex-end'} display="flex">
-                                <Button sx={{ textTransform: 'none' }}>Back</Button>
+                                <Button onClick={() => {
+                                    setNextClicked(false)
+                                    setBackClicked(true);
+                                }} sx={{ textTransform: 'none' }}>Back</Button>
                                 <Button
                                     sx={{ textTransform: 'none' }}
                                     onClick={postJob}
@@ -402,7 +425,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate }) =
                     </Grid>
                 </Grid>
             </Grid>
-        </Box>
+            <Joblink open={open} onClose={() => setOpen(false)} jobLinks={jobLinks} />        </Box>
     );
 };
 
