@@ -12,7 +12,9 @@ const LoginScreen = ({email , setEmail}) => {
   const navigate = useNavigate(); // Initialize useNavigate hook
   const handleSendOTP = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/send-otp', { email });
+      // const response = await axios.post('http://localhost:5000/send-otp', { email });
+      const response = await axios.post('https://appit-backend-wb0d.onrender.com/send-otp', { email });
+
       setMessage(response.data.message);
 
       if (response.status == 200) {

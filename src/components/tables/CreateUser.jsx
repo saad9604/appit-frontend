@@ -18,7 +18,9 @@ export default function CreateUser() {
 
 
     useEffect(() => {
-        fetch('http://localhost:5000/get-users')
+        // fetch('http://localhost:5000/get-users')
+        fetch('https://appit-backend-wb0d.onrender.com/get-users')
+
             .then(res => res.json())
             .then(data => {
                 if (data.success) setUsers(data.users);

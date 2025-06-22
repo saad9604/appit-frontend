@@ -14,7 +14,9 @@ const Otp = ({email , setEmail}) => {
   const handleSendOTP = async () => {
     try {
       console.log(email, otp);
-      const response = await axios.post('http://localhost:5000/verify-otp', { email, otp });
+      // const response = await axios.post('http://localhost:5000/verify-otp', { email, otp });
+      const response = await axios.post('https://appit-backend-wb0d.onrender.com/verify-otp', { email, otp });
+
       if (response.status === 200) {
         setMessage('OTP verified successfully!');
         navigate('/dashboard');

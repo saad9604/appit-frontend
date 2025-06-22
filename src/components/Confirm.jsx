@@ -85,7 +85,9 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
         try {
             if (validate()) {
                 console.log('Posting job with form data:', form);
-                const response = await axios.post('http://localhost:5000/post-job', form);
+                // const response = await axios.post('http://localhost:5000/post-job', form);
+                const response = await axios.post('https://appit-backend-wb0d.onrender.com/post-job', form);
+
                 console.log('Response from server:', response.data);
                 if (response.data.success === true) {
                     console.log('Job posted successfully:', response.data);

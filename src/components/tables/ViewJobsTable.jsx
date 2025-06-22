@@ -21,7 +21,9 @@ export default function ViewJobsTable({setViewButtonClicked, viewButtonClicked})
     const fetchJobs = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/get-jobs-with-application-count');
+            // const res = await fetch('http://localhost:5000/get-jobs-with-application-count');
+            const res = await fetch('https://appit-backend-wb0d.onrender.com/get-jobs-with-application-count');
+
             const data = await res.json();
             if (data.success) {
                 setJobs(data.jobs);

@@ -28,7 +28,9 @@ export default function ApplicationTable() {
     const [search, setSearch] = React.useState(""); // Add search state
 
     useEffect(() => {
-        fetch('http://localhost:5000/get-applications')
+        // fetch('http://localhost:5000/get-applications')
+        fetch('https://appit-backend-wb0d.onrender.com/get-applications')
+
             .then(res => res.json())
             .then(data => {
                 if (data.success) setApplications(data.jobs);
