@@ -119,7 +119,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
 
             <Grid container spacing={1}>
                 <Grid item size={{ xs: 12, md: 8 }}>
-                    <Paper elevation={2} sx={{ p: 2 }}>
+                    <Paper elevation={2} sx={{ p: 2 , backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
                         <Typography gutterBottom sx={{
                             fontWeight: 600,
                             letterSpacing: '0.21px',
@@ -379,7 +379,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                 }}>
                     <Grid container spacing={2} direction="column">
                         <Grid item>
-                            <Paper elevation={2} sx={{ p: 1, mb: 1 }}>
+                            <Paper elevation={2} sx={{ p: 1, mb: 1 ,backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
                                 <Grid container alignItems="center" spacing={2}>
                                     <Grid item><img src={logo} width={60} /></Grid>
                                     <Grid item>
@@ -393,7 +393,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                             </Paper>
                         </Grid>
                         <Grid item>
-                            <Paper elevation={2} sx={{ p: 2 }}>
+                            <Paper elevation={2} sx={{ p: 2 ,backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
                                 <Grid container direction="column" spacing={2}>
                                     <Grid item>
                                         <LightbulbOutlinedIcon sx={{ fontSize: 28, color: '#888' }} />
