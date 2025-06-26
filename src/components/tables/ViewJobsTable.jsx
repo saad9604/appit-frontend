@@ -12,7 +12,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function ViewJobsTable({setViewButtonClicked, viewButtonClicked}) {
+export default function ViewJobsTable({ setViewButtonClicked, viewButtonClicked, setSelectedSection }) {
     const [hoveredRow, setHoveredRow] = useState(null);
     const [search, setSearch] = useState("");
     const [jobs, setJobs] = useState([]);
@@ -46,6 +46,11 @@ export default function ViewJobsTable({setViewButtonClicked, viewButtonClicked})
     const filteredJobs = jobs.filter((job) =>
         job.job_title.toLowerCase().includes(search.toLowerCase())
     );
+
+    const handleViewClick = () => {
+        //    setViewButtonClicked(true)
+        setSelectedSection('Applications');
+    }
 
     return (
         <Box>
@@ -154,26 +159,46 @@ export default function ViewJobsTable({setViewButtonClicked, viewButtonClicked})
                                 <TableCell>
                                     <Box sx={{ display: 'column', alignItems: 'center', gap: 1 }}>
                                         {job.job_title}
-                                        {hoveredRow === job.id && (
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1 }}>
-                                                <ContentCopyIcon sx={{ fontSize: 18, color: '#055087', cursor: 'pointer' }} /><span>copy</span>
-                                                <EditIcon sx={{ fontSize: 18, color: '#055087', cursor: 'pointer' }} /><span>edit</span>
-                                                <DeleteIcon sx={{ fontSize: 18, color: '#D32F2F', cursor: 'pointer' }} /><span>Delete</span>
-                                            </Box>
-                                        )}
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: 1,
+                                                ml: 1,
+                                                opacity: hoveredRow === job.id ? 1 : 0,
+                                                transform: hoveredRow === job.id ? 'translateY(0)' : 'translateY(10px)',
+                                                pointerEvents: hoveredRow === job.id ? 'auto' : 'none',
+                                                transition: 'opacity 0.3s, transform 0.3s',
+                                            }}
+                                        >
+                                            <ContentCopyIcon sx={{ fontSize: 18, color: '#055087', cursor: 'pointer' }} /><span>copy</span>
+                                            <EditIcon sx={{ fontSize: 18, color: '#055087', cursor: 'pointer' }} /><span>edit</span>
+                                            <DeleteIcon sx={{ fontSize: 18, color: '#D32F2F', cursor: 'pointer' }} /><span>Delete</span>
+                                        </Box>
                                     </Box>
                                 </TableCell>
                                 <TableCell>{job.platform}</TableCell>
                                 <TableCell>
-                                    {String(job.application_count).padStart(2, '0')} Applications{' '}
-                                    <Typography
-                                        component="span"
-                                        sx={{ color: '#0057D9', cursor: 'pointer', ml: 1 }}
-                                        onClick={() => setViewButtonClicked(true)}
-                                    >
-                                        (View)
-                                    </Typography>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                        <Typography>
+                                            {String(job.application_count).padStart(2, '0')} Applications
+                                        </Typography>
+                                        <Typography
+                                            component="span"
+                                            sx={{
+                                                color: '#0057D9',
+                                                cursor: 'pointer',
+                                                fontSize: '0.875rem',
+                                                mt: 0.5,
+                                                width: 'fit-content'
+                                            }}
+                                            onClick={handleViewClick}
+                                        >
+                                            (View)
+                                        </Typography>
+                                    </Box>
                                 </TableCell>
+
                                 <TableCell>{job.email_address}</TableCell>
                                 <TableCell>
                                     {new Date(job.created_at).toLocaleDateString('en-GB')}

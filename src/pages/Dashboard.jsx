@@ -54,7 +54,7 @@ const DrawerSection = ({ title, icon, items, expanded, onSectionClick, onItemCli
     </Box>
 
     {expanded && (
-      
+
       <List dense>
 
         {items.map((item) => (
@@ -154,7 +154,7 @@ export default function Dashboard() {
         </Toolbar>
         <Divider />
 
-       <DrawerSection
+        <DrawerSection
           title="Dashboard"
           icon={<DashboardIcon sx={{ color: 'white' }} />}
           items={[]}
@@ -227,7 +227,11 @@ export default function Dashboard() {
       </Drawer>
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {(selectedSection === 'View Jobs' && <ViewJobsTable setViewButtonClicked={setViewButtonClicked} viewButtonClicked={viewButtonClicked} />) ||
+        {(selectedSection === 'View Jobs' && (
+          viewButtonClicked
+            ? <ApplicationTable />
+            : <ViewJobsTable setViewButtonClicked={setViewButtonClicked} viewButtonClicked={viewButtonClicked} setSelectedSection={setSelectedSection}/>
+        )) ||
           (selectedSection === 'Applications' && <ApplicationTable />) ||
           (selectedSection === 'Create User' && <CreateUser />) ||
           (selectedSection === 'Add Jobs' && (
@@ -238,8 +242,6 @@ export default function Dashboard() {
                 : <Post setBackClicked={setBackClicked} nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
           ))
         }
-
-
       </Box>
     </Box>
   );

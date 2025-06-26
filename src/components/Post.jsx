@@ -52,7 +52,7 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
       <Grid container spacing={1}>
         <Grid item size={{ xs: 12, md: 8 }}>
 
-          <Paper elevation={2} sx={{ p: 2 , backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
+          <Paper elevation={2} sx={{ p: 2 , borderRadius: '8px' }}>
             <Typography gutterBottom sx={{
               fontWeight: 600,
               letterSpacing: '0.21px'
@@ -271,7 +271,7 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
           <Grid container spacing={2} direction="column">
             {/* Job Preview */}
             <Grid item>
-              <Paper elevation={2} sx={{ p: 1, mb: 1, backgroundColor:'#f8f8f8', borderRadius: '8px'  }}>
+              <Paper elevation={2} sx={{ p: 1, mb: 1, borderRadius: '8px'  }}>
                 <Grid container alignItems="center" spacing={2}>
                   <Grid item><img src={logo} width={60} /></Grid>
                   <Grid item>
@@ -287,7 +287,7 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
 
             {/* Skills */}
             <Grid item>
-              <Paper elevation={2} sx={{ p: 2 ,backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
+              <Paper elevation={2} sx={{ p: 2 ,borderRadius: '8px' }}>
                 <Typography variant="subtitle1" gutterBottom>Skills</Typography>
                 <Autocomplete
                   multiple
@@ -319,7 +319,7 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
             </Grid>
 
             <Grid item>
-              <Paper elevation={2} sx={{ p: 2 ,backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
+              <Paper elevation={2} sx={{ p: 2 , borderRadius: '8px' }}>
                 <Grid container spacing={1} direction="column">
                   <Grid item><TipsAndUpdatesIcon /></Grid>
                   <Grid item>

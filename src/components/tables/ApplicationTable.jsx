@@ -26,6 +26,7 @@ export default function ApplicationTable() {
     const [applications, setApplications] = useState([]);
 
     const [search, setSearch] = React.useState(""); // Add search state
+    const [selectedActions, setSelectedActions] = useState({});
 
     useEffect(() => {
         // fetch('http://localhost:5000/get-applications')
@@ -79,13 +80,13 @@ export default function ApplicationTable() {
 
                     <TextField
                         variant="outlined"
-                        placeholder="Search"
+                        placeholder="Search by Application Name"
                         size="small"
                         value={search} // Bind value to state
                         onChange={(e) => setSearch(e.target.value)}
                         sx={{
                             borderRadius: 2,
-                            width: 250,
+                            width: 270,
                         }}
                         InputProps={{
                             startAdornment: (
@@ -156,16 +157,34 @@ export default function ApplicationTable() {
                                 <TableCell>{app.phone}</TableCell>
                                 <TableCell>90%</TableCell>
                                 <TableCell>
-                                    <FormControl fullWidth size="small" variant="outlined">
+               <FormControl fullWidth size="small" variant="outlined">
                                         <Select
                                             displayEmpty
-                                            defaultValue=""
-                                            sx={{ minWidth: 160 }}
+                                            value={selectedActions[app.id] || ""}
+                                            onChange={e =>
+                                                setSelectedActions(prev => ({
+                                                    ...prev,
+                                                    [app.id]: e.target.value
+                                                }))
+                                            }
+                                            sx={{ minWidth: 200 }} // Increase width if needed
                                             renderValue={(selected) => {
                                                 if (!selected) {
                                                     return <span style={{ color: '#aaa' }}>Select Action</span>;
                                                 }
-                                                return selected;
+                                                // Show full label for selected value
+                                                switch (selected) {
+                                                    case "view":
+                                                        return "View Applicant";
+                                                    case "schedule":
+                                                        return "Schedule an interview";
+                                                    case "hire":
+                                                        return "Hire now";
+                                                    case "reject":
+                                                        return "Reject";
+                                                    default:
+                                                        return selected;
+                                                }
                                             }}
                                         >
                                             <MenuItem value="">
