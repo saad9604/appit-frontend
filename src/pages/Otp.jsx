@@ -11,20 +11,23 @@ const Otp = ({email , setEmail}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate(); // Initialize useNavigate hook
-  const handleSendOTP = async () => {
-    try {
-      console.log(email, otp);
-      // const response = await axios.post('http://localhost:5000/verify-otp', { email, otp });
-      const response = await axios.post('https://appit-backend-wb0d.onrender.com/verify-otp', { email, otp });
 
-      if (response.status === 200) {
-        setMessage('OTP verified successfully!');
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      setMessage('Verification failed. Please check your OTP and try again.');
+
+  const handleSendOTP = async () => {
+  try {
+    console.log(email, otp);
+    const response = await axios.post('https://appit-backend-wb0d.onrender.com/verify-otp', { email, otp });
+
+    if (response.status === 200) {
+      sessionStorage.setItem('userEmail', email); // ✅ Store email
+      setMessage('OTP verified successfully!');
+      navigate('/dashboard');
     }
-  };
+  } catch (error) {
+    setMessage('Verification failed. Please check your OTP and try again.');
+  }
+};
+
 
   return (
     <Box
@@ -43,7 +46,7 @@ const Otp = ({email , setEmail}) => {
       <Grid container spacing={2} alignItems="center" justifyContent="center">
         <Grid item xs={12} md={5}>
           <Paper elevation={3} sx={{
-            minHeight: 360,
+            minHeight: 400,
             p: { xs: 2, md: 4 },
             borderRadius: 3,
             backgroundColor: 'rgba(255, 255, 255, 0.2)',

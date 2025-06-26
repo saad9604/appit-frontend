@@ -22,7 +22,7 @@ const jobData = [
 ];
 
 
-export default function ApplicationTable() {
+export default function ApplicationTable({ setApplicationDetailsClicked }) {
     const [applications, setApplications] = useState([]);
 
     const [search, setSearch] = React.useState(""); // Add search state
@@ -157,17 +157,23 @@ export default function ApplicationTable() {
                                 <TableCell>{app.phone}</TableCell>
                                 <TableCell>90%</TableCell>
                                 <TableCell>
-               <FormControl fullWidth size="small" variant="outlined">
+                                    <FormControl fullWidth size="small" variant="outlined">
                                         <Select
                                             displayEmpty
                                             value={selectedActions[app.id] || ""}
-                                            onChange={e =>
+                                            onChange={(e) => {
+                                                const value = e.target.value;
                                                 setSelectedActions(prev => ({
                                                     ...prev,
-                                                    [app.id]: e.target.value
-                                                }))
-                                            }
-                                            sx={{ minWidth: 200 }} // Increase width if needed
+                                                    [app.id]: value
+                                                }));
+
+                                                if (value === "view") {
+                                                    setApplicationDetailsClicked(true); // trigger detail view
+                                                }
+                                            }}
+
+                                            sx={{ minWidth: 100 }} // Increase width if needed
                                             renderValue={(selected) => {
                                                 if (!selected) {
                                                     return <span style={{ color: '#aaa' }}>Select Action</span>;

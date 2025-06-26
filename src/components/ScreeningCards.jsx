@@ -22,6 +22,7 @@ const ScreeningQuestionCard = ({
       mb: 2,
       position: "relative",
       minHeight: 80,
+      backgroundColor: "#F6F6F6",
     }}
   >
     <Grid container justifyContent={"space-between"} spacing={2}>

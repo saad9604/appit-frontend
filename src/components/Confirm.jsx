@@ -27,6 +27,7 @@ import logo from '../assets/logo.png'; // Assuming you have a logo image
 import ScreeningCards from '../components/ScreeningCards';
 import ScreeningQuestionCard from '../components/ScreeningCards';
 import Joblink from './JobLink.jsx/Joblink';
+import WbIncandescentOutlinedIcon from '@mui/icons-material/WbIncandescentOutlined';
 
 const skillsList = [
     'Ux Research', 'Interaction Design', 'Visual Design', 'Information Architecture',
@@ -119,7 +120,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
 
             <Grid container spacing={1}>
                 <Grid item size={{ xs: 12, md: 8 }}>
-                    <Paper elevation={2} sx={{ p: 2 , backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
+                    <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
                         <Typography gutterBottom sx={{
                             fontWeight: 600,
                             letterSpacing: '0.21px',
@@ -132,41 +133,53 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                             letterSpacing: '0.21px', mt: 2
                         }}>Applicant Collections</Typography>
 
-                        <Grid container spacing={2}> {/* Inner Grid for Job Details fields */}
+                        <Grid container spacing={2}>
+                            {/* Receive Applicants */}
                             <Grid item size={{ xs: 12, sm: 6 }}>
-                                <FormControl fullWidth variant="standard" error={!!errors.receiveApplications}>
-                                    <InputLabel>Receive Applications</InputLabel>
-                                    <Select
-                                        label="Receive Applications"
-                                        name="receiveApplications"
-                                        value={form.receiveApplications || "email"}
-                                        onChange={handleChange}
-                                        defaultValue={"email"}
-                                    >
-                                        <MenuItem value="email">Email</MenuItem>
-                                    </Select>
-                                    {errors.receiveApplications && (
-                                        <Typography color="error" variant="caption">
-                                            Required
-                                        </Typography>
-                                    )}
-                                </FormControl>
+                                <label style={{ display: 'block', marginBottom: '4px' }}>
+                                    Receive applicants
+                                </label>
+                                <select
+                                    name="receiveApplications"
+                                    value={form.receiveApplications || 'email'}
+                                    onChange={handleChange}
+                                    style={{
+                                        width: '100%',
+                                        padding: '8px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px'
+                                    }}
+                                >
+                                    <option value="email">By email</option>
+                                </select>
+                                {errors.receiveApplications && (
+                                    <div style={{ color: 'red', fontSize: '12px' }}>Required</div>
+                                )}
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Email Address"
-                                    name="emailAddress"
+                            {/* Email Address */}
+                            <Grid item size={{ xs: 12, sm: 6 }}>
+                                <label style={{ display: 'block', marginBottom: '4px' }}>
+                                    Email Address
+                                </label>
+                                <input
                                     type="email"
-                                    value={form.emailAddress || ""}
+                                    name="emailAddress"
+                                    value={form.emailAddress || ''}
                                     onChange={handleChange}
-                                    error={!!errors.emailAddress}
-                                    helperText={errors.emailAddress && "Required"}
-                                    variant='standard'
+                                    style={{
+                                        width: '100%',
+                                        padding: '8px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px'
+                                    }}
                                 />
+                                {errors.emailAddress && (
+                                    <div style={{ color: 'red', fontSize: '12px' }}>Required</div>
+                                )}
                             </Grid>
                         </Grid>
+
 
                         <Box mt={3}>
                             <Typography variant="subtitle1" gutterBottom fontWeight="bold">
@@ -379,7 +392,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                 }}>
                     <Grid container spacing={2} direction="column">
                         <Grid item>
-                            <Paper elevation={2} sx={{ p: 1, mb: 1 ,backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
+                            <Paper elevation={2} sx={{ p: 1, mb: 1, borderRadius: '8px' }}>
                                 <Grid container alignItems="center" spacing={2}>
                                     <Grid item><img src={logo} width={60} /></Grid>
                                     <Grid item>
@@ -393,10 +406,10 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                             </Paper>
                         </Grid>
                         <Grid item>
-                            <Paper elevation={2} sx={{ p: 2 ,backgroundColor:'#f8f8f8', borderRadius: '8px' }}>
+                            <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
                                 <Grid container direction="column" spacing={2}>
                                     <Grid item>
-                                        <LightbulbOutlinedIcon sx={{ fontSize: 28, color: '#888' }} />
+                                        <WbIncandescentOutlinedIcon sx={{ fontSize: 28, color: '#888', transform: 'rotate(180deg)' }} />
                                     </Grid>
                                     <Grid item>
                                         <Typography variant="subtitle2" fontWeight="bold">
@@ -432,7 +445,9 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                     </Grid>
                 </Grid>
             </Grid>
-            <Joblink open={open} onClose={() => setOpen(false)} jobLinks={jobLinks} />        </Box>
+            <Joblink open={open} onClose={() => setOpen(false)} jobLinks={jobLinks} />
+
+        </Box>
     );
 };
 

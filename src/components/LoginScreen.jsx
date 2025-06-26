@@ -39,10 +39,10 @@ const LoginScreen = ({email , setEmail}) => {
         paddingX:'5px'
       }}
     >
-      <Grid container spacing={2} alignItems="center" justifyContent="center">
+      <Grid container spacing={10} alignItems="center" justifyContent="center">
         <Grid item xs={12} md={5}>
           <Paper elevation={3} sx={{
-            minHeight: 360,
+            minHeight: 400,
             p: { xs: 2, md: 4 },
             borderRadius: 3,
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -76,10 +76,11 @@ const LoginScreen = ({email , setEmail}) => {
               />
               <Button variant="contained" onClick={handleSendOTP} sx={{
                 borderRadius: 10,
+                fontSize: '10px',
                 textTransform: 'none',
-                px: 3,
+                px: 2,
                 backgroundColor: 'black',
-                width: { xs: '100%', sm: 'auto' }
+                width: { xs: '100%', sm: '25%' },
               }}>
                 Send OTP
               </Button>

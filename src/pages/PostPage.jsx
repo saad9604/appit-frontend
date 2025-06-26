@@ -27,7 +27,7 @@ const skillsList = [
   'Content Strategy', 'Design Systems',
 ];
 
-const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) => {
+const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [showSeo, setShowSeo] = useState(false); // <-- Add this
 
@@ -46,13 +46,13 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
 
 
   return (
-    <Box sx={{ p: 1 }}>
+    <Box sx={{ p: 5 }}>
 
 
       <Grid container spacing={1}>
         <Grid item size={{ xs: 12, md: 8 }}>
 
-          <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
+          <Paper elevation={4} sx={{ p: 3, borderRadius: '8px' }}>
             <Typography gutterBottom sx={{
               fontWeight: 600,
               letterSpacing: '0.21px'
@@ -66,7 +66,7 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
             }}>Job Details*</Typography>
 
             <Grid container spacing={2} sx={{ mt: 2 }}>
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid item size={{ xs: 12, md: 6 }}>
                 <label>
                   Job Title <span style={{ color: 'red' }}>*</span>
                   <input
@@ -80,7 +80,7 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
                 </label>
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <label>
                   Company
                   <input
@@ -94,9 +94,9 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
                 </label>
               </Grid>
             </Grid>
-
+              
             <Grid container spacing={2} sx={{ mt: 2 }}>
-              <Grid item size={{ xs: 12, sm: 6 }}>
+               <Grid item size={{ xs: 12, sm: 6 }}>
                 <label>
                   Work Type
                   <select
@@ -128,41 +128,26 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
                 </label>
               </Grid>
             </Grid>
+             
 
-
-            <Grid item size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
-              <label>
-                Job Type
-                <select
-                  name="jobType"
-                  value={form.jobType}
-                  onChange={handleChange}
-                  style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                  }}
-                >
-                  <option value="">Select</option>
-                  <option value="Full Time">Full Time</option>
-                  <option value="Part Time">Part Time</option>
-                  <option value="Contract">Contract</option>
-                  <option value="Freelance">Freelance</option>
-                  <option value="Internship">Internship</option>
-                  <option value="Temporary">Temporary</option>
-                  <option value="Remote">Remote</option>
-                  <option value="Hybrid">Hybrid</option>
-                  <option value="On-Site">On-Site</option>
-                  <option value="Consultant">Consultant</option>
-                </select>
-                {errors.jobType && (
-                  <div style={{ color: 'red', fontSize: '12px' }}>Required</div>
-                )}
-              </label>
-            </Grid>
-
-
+              <Grid item size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
+                <label>
+                  Job Type
+                  <select
+                    name="jobType"
+                    value={form.jobType}
+                    onChange={handleChange}
+                    style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
+                  >
+                    <option value="">Select</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contract">Contract</option>
+                  </select>
+                  {errors.jobType && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
+                </label>
+              </Grid>
+            
 
 
             <Box mt={3}>
@@ -374,4 +359,4 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
   );
 };
 
-export default Post;
+export default PostPage;
