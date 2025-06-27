@@ -107,7 +107,7 @@ export default function ViewJobsTable({ setJobIDCopy ,jobIDCopy, jobID, setJobID
         console.log("Saving job with ID:", jobId, "New data:", editedJobData);
 
         try {
-            const response = await fetch('http://localhost:5000/update-table', {
+            const response = await fetch('https://appit-backend-wb0d.onrender.com/update-table', {
                 method: 'POST', // Assuming your /update-table uses POST
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ export default function ViewJobsTable({ setJobIDCopy ,jobIDCopy, jobID, setJobID
 
     const handleDelete = async (jobId) => {
         try {
-            const response = await fetch(`http://localhost:5000/delete-job/${jobId}`, {
+            const response = await fetch(`https://appit-backend-wb0d.onrender.com/delete-job/${jobId}`, {
                 method: 'DELETE',
             });
 

@@ -24,7 +24,7 @@ export default function CreateUser() {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
-    fetch('http://localhost:5000/get-users')
+    fetch('https://appit-backend-wb0d.onrender.com/get-users')
       .then(res => res.json())
       .then(data => {
         if (data.success) setUsers(data.users);
@@ -44,7 +44,7 @@ export default function CreateUser() {
 
   const handleSave = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/update-user/${editingUserId}`, {
+      const res = await fetch(`https://appit-backend-wb0d.onrender.com/update-user/${editingUserId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editedUser)
@@ -72,7 +72,7 @@ export default function CreateUser() {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/delete-user/${deleteUserId}`, {
+      const res = await fetch(`https://appit-backend-wb0d.onrender.com/delete-user/${deleteUserId}`, {
         method: 'DELETE'
       });
       const data = await res.json();
