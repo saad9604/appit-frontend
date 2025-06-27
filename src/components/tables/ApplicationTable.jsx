@@ -13,33 +13,82 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 
-const jobData = [
-    { id: 1, name: 'UI UX Designer', source: 'Appit Software', apps: 8, postedBy: 'Sai kiran', date: '16-08-2025' },
-    { id: 2, name: 'Product Manager', source: 'Workisy, Appit software', apps: 9, postedBy: 'Aditi Sharma', date: '15-09-2025' },
-    { id: 3, name: 'Front-end Developer', source: 'Appit Software', apps: 30, postedBy: 'Mark Johnson', date: '22-10-2025' },
-    { id: 4, name: 'Data Analyst', source: 'Appit Software', apps: 19, postedBy: 'Anita Gupta', date: '05-11-2025' },
-    { id: 5, name: 'Backend Developer', source: 'Workisy, Appit software', apps: 20, postedBy: 'Vikram Singh', date: '30-12-2025' },
-];
-
-
-export default function ApplicationTable({ setApplicationDetailsClicked }) {
+export default function ApplicationTable({setJobIDCopy ,jobIDCopy, jobID, setJobID, viewButtonClicked, setApplicationDetailsClicked, setCurrentApplicantDetails, currentApplicantDetails }) {
     const [applications, setApplications] = useState([]);
-
-    const [search, setSearch] = React.useState(""); // Add search state
+    const [search, setSearch] = useState("");
     const [selectedActions, setSelectedActions] = useState({});
 
-    useEffect(() => {
-        // fetch('http://localhost:5000/get-applications')
-        fetch('https://appit-backend-wb0d.onrender.com/get-applications')
-
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) setApplications(data.jobs);
+    const getJobsApplications = async (jobID) => {
+        try {
+            const response = await fetch('http://localhost:5000/applications-by-job', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ job_id: jobID }),
             });
-    }, []);
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                console.log(`Applications for job ID ${jobID}:`, data.applications);
+                setApplications(data.applications);
+            } else {
+                console.error('Failed to fetch applications:', data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching applications:', error);
+        }
+    }
+
+    useEffect(() => {
+        if (jobID) {
+            console.log("Job ID is set, fetching applications for job ID:", jobID);
+            getJobsApplications(jobID);
+        } else {
+            console.log("Job ID is not set, fetching all applications", jobID);
+            fetch('https://appit-backend-wb0d.onrender.com/get-applications')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        setApplications(data.jobs);
+                    } else {
+                        console.error("Failed to fetch applications:", data.message);
+                    }
+                })
+                .catch(error => console.error("Error fetching applications:", error));
+        }
+    }, [jobID]); // 👈 jobID added here
+
+
+
     const filteredApps = applications.filter((app) =>
         app.name.toLowerCase().includes(search.toLowerCase())
     );
+
+    // Function to handle fetching and logging applicant details
+    const handleViewApplicant = async (appId) => {
+        try {
+            // Make the API call to get specific applicant details
+            const response = await fetch(`http://localhost:5000/get-applicant-details/${appId}`);
+
+            // const response = await fetch(`https://appit-backend-wb0d.onrender.com/get-applicant-details/${appId}`);
+            const data = await response.json();
+
+            if (data.success) {
+                console.log("Fetched applicant details from API:", data.applicant);
+                setCurrentApplicantDetails(data.applicant);
+                // If you need to store these details for display in this component:
+                // setCurrentApplicantDetails(data.applicant);
+            } else {
+                console.error("Failed to fetch applicant details from API:", data.message);
+            }
+        } catch (error) {
+            console.error("Error during API call for applicant details:", error);
+        }
+    };
+
+
     return (
         <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
@@ -169,7 +218,15 @@ export default function ApplicationTable({ setApplicationDetailsClicked }) {
                                                 }));
 
                                                 if (value === "view") {
-                                                    setApplicationDetailsClicked(true); // trigger detail view
+                                                    // 1. Console log the whole row data
+                                                    console.log("Viewing applicant details (from table row data):", app);
+                                                    // 2. Make the API call to get more comprehensive details
+                                                    handleViewApplicant(app.id); // Pass the applicant's ID
+
+                                                    // Trigger the parent component's state change for detail view
+                                                    if (setApplicationDetailsClicked) {
+                                                        setApplicationDetailsClicked(true);
+                                                    }
                                                 }
                                             }}
 
@@ -178,7 +235,6 @@ export default function ApplicationTable({ setApplicationDetailsClicked }) {
                                                 if (!selected) {
                                                     return <span style={{ color: '#aaa' }}>Select Action</span>;
                                                 }
-                                                // Show full label for selected value
                                                 switch (selected) {
                                                     case "view":
                                                         return "View Applicant";

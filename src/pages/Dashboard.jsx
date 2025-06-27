@@ -22,6 +22,8 @@ import ViewJobsTable from '../components/tables/ViewJobsTable';
 import ApplicationTable from '../components/tables/ApplicationTable';
 import DashboardHome from '../components/DashboardHome';
 import ApplicationDetails from '../components/ApplicationDetails';
+import { useNavigate } from 'react-router-dom';
+
 const drawerWidth = 240;
 
 const DrawerSection = ({ title, icon, items, expanded, onSectionClick, onItemClick, selectedSection }) => (
@@ -79,54 +81,20 @@ const DrawerSection = ({ title, icon, items, expanded, onSectionClick, onItemCli
   </>
 );
 
-export default function Dashboard({backClicked,setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) {
-  const [selectedSection, setSelectedSection] = useState('');
-  const [expandedSections, setExpandedSections] = useState({ Dashboard: true }); // allow multiple open
-  // const [nextClicked, setNextClicked] = useState(false);
-  // const [backClicked, setBackClicked] = useState(false);
+export default function Dashboard({ selectedSection, setSelectedSection,screeningQuestionsMap, backClicked, setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) {
+  const [expandedSection, setExpandedSection] = useState('Dashboard');
   const [viewButtonClicked, setViewButtonClicked] = useState(false);
   const [ApplicationDetailsClicked, setApplicationDetailsClicked] = useState(false);
-  // const [errors, setErrors] = useState({});
+  const [currentApplicantDetails, setCurrentApplicantDetails] = useState(null);
+  const [jobID ,setJobID] = useState(null);
+  const [jobIDCopy ,setJobIDCopy] = useState(null);
+
   const handleSectionClick = (section) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
+    setExpandedSection(prev => (prev === section ? '' : section));
   };
 
-  // const [form, setForm] = useState({
-  //   jobTitle: '',
-  //   company: '',
-  //   workType: 'On-site',
-  //   jobLocation: '',
-  //   jobType: 'Full-time',
-  //   description: '',
-  //   metaTitle: '',
-  //   url: '',
-  //   metaDescription: '',
-  //   filterOut: false,
-  //   platform: "",
-  //   customQuestion: "",
-  //   selectedSkills: [],
-  //   screeningCategories: ["Education", "Background Check", "Hybrid Word"], // <-- add this
-  // });
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setForm((prev) => ({ ...prev, [name]: value }));
-  // };
-
-  // const validate = () => {
-  //   const newErrors = {};
-  //   console.log('Validating form:', form);
-  //   requiredFields.forEach(field => {
-  //     if (!form[field] || form[field].trim() === '') {
-  //       newErrors[field] = true;
-  //     }
-  //   });
-  //   setErrors(newErrors);
-  //   return Object.keys(newErrors).length === 0;
-  // };
+  const navigate = useNavigate();
 
 
   return (
@@ -174,8 +142,10 @@ export default function Dashboard({backClicked,setBackClicked, nextClicked, setN
                   color: 'white',
                 },
               }}
-              onClick={() => setSelectedSection('Dashboard')}
-            >
+              onClick={() => {
+                setExpandedSection('Dashboard');
+                setSelectedSection('Dashboard');
+              }}            >
               <ListItemIcon>
                 <DashboardIcon sx={{ color: 'white' }} />
               </ListItemIcon>
@@ -192,17 +162,24 @@ export default function Dashboard({backClicked,setBackClicked, nextClicked, setN
           title="Career"
           icon={<WorkIcon sx={{ color: 'white' }} />}
           items={['Add Jobs', 'View Jobs', 'Applications']}
-          expanded={!!expandedSections['Career']}
+          expanded={expandedSection === 'Career'}
           onSectionClick={handleSectionClick}
-          onItemClick={setSelectedSection}
+          onItemClick={(item) => {
+            if (item === 'Add Jobs') {
+              navigate('/postjob'); // 🚀 Navigate on click
+            } else {
+              setSelectedSection(item);
+            }
+          }}
           selectedSection={selectedSection}
         />
+
 
         <DrawerSection
           title="Workisy"
           icon={<PeopleIcon sx={{ color: 'white' }} />}
           items={['Users', 'Data Base', 'Contact']}
-          expanded={!!expandedSections['Workisy']}
+          expanded={expandedSection === 'Workisy'}
           onSectionClick={handleSectionClick}
           onItemClick={setSelectedSection}
           selectedSection={selectedSection}
@@ -212,7 +189,7 @@ export default function Dashboard({backClicked,setBackClicked, nextClicked, setN
           title="Appit Software"
           icon={<FolderIcon sx={{ color: 'white' }} />}
           items={['Blogs', 'Job Applications', 'Contact']}
-          expanded={!!expandedSections['Appit Software']}
+          expanded={expandedSection === 'Appit Software'}
           onSectionClick={handleSectionClick}
           onItemClick={setSelectedSection}
           selectedSection={selectedSection}
@@ -222,7 +199,7 @@ export default function Dashboard({backClicked,setBackClicked, nextClicked, setN
           title="User creation"
           icon={<AddBoxIcon sx={{ color: 'white' }} />}
           items={['Create User']}
-          expanded={!!expandedSections['User creation']}
+          expanded={expandedSection === 'User creation'}
           onSectionClick={handleSectionClick}
           onItemClick={setSelectedSection}
           selectedSection={selectedSection}
@@ -251,18 +228,18 @@ export default function Dashboard({backClicked,setBackClicked, nextClicked, setN
       </Drawer>
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {(selectedSection === '' || selectedSection === 'Dashboard') && expandedSections['Dashboard'] ? (
+        {(selectedSection === '' || selectedSection === 'Dashboard') && expandedSection === 'Dashboard' ? (
           <DashboardHome />
         ) : (
           (selectedSection === 'View Jobs' && (
             viewButtonClicked
-              ? <ApplicationTable setApplicationDetailsClicked={setApplicationDetailsClicked} />
-              : <ViewJobsTable setViewButtonClicked={setViewButtonClicked} viewButtonClicked={viewButtonClicked} setSelectedSection={setSelectedSection} />
+              ? <ApplicationTable setJobIDCopy={setJobIDCopy} jobIDCopy={jobIDCopy}  jobID={jobID} setJobID={setJobID} viewButtonClicked={viewButtonClicked} setApplicationDetailsClicked={setApplicationDetailsClicked} setCurrentApplicantDetails={setCurrentApplicantDetails} currentApplicantDetails={currentApplicantDetails} />
+              : <ViewJobsTable setJobIDCopy={setJobIDCopy} jobIDCopy={jobIDCopy} jobID={jobID} setJobID={setJobID} setViewButtonClicked={setViewButtonClicked} viewButtonClicked={viewButtonClicked} setSelectedSection={setSelectedSection} />
           )) ||
           (selectedSection === 'Applications' &&
             (ApplicationDetailsClicked
-              ? <ApplicationDetails setApplicationDetailsClicked={setApplicationDetailsClicked} />
-              : <ApplicationTable setApplicationDetailsClicked={setApplicationDetailsClicked} />)
+              ? <ApplicationDetails setApplicationDetailsClicked={setApplicationDetailsClicked} setCurrentApplicantDetails={setCurrentApplicantDetails} currentApplicantDetails={currentApplicantDetails} />
+              : <ApplicationTable setApplicationDetailsClicked={setApplicationDetailsClicked} setCurrentApplicantDetails={setCurrentApplicantDetails} currentApplicantDetails={currentApplicantDetails} />)
           )
           ||
           (selectedSection === 'Create User' && <CreateUser />) ||
@@ -270,7 +247,7 @@ export default function Dashboard({backClicked,setBackClicked, nextClicked, setN
             backClicked
               ? <Post setBackClicked={setBackClicked} nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
               : nextClicked
-                ? <Confirm setNextClicked={setNextClicked} setBackClicked={setBackClicked} backClicked={backClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
+                ? <Confirm setSelectedSection={setSelectedSection} screeningQuestionsMap={screeningQuestionsMap} setNextClicked={setNextClicked} setBackClicked={setBackClicked} backClicked={backClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
                 : <Post setBackClicked={setBackClicked} nextClicked={nextClicked} setNextClicked={setNextClicked} form={form} setForm={setForm} handleChange={handleChange} errors={errors} setErrors={setErrors} validate={validate} />
           ))
         )}

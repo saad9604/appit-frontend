@@ -27,8 +27,8 @@ export default function CreateUserModal({ open, onClose, onCreate }) {
         };
 
         try {
-            // const res = await fetch('http://localhost:5000/add-user', {
-            const res = await fetch('https://appit-backend-wb0d.onrender.com/add-user', {
+            const res = await fetch('http://localhost:5000/add-user', {
+            // const res = await fetch('https://appit-backend-wb0d.onrender.com/add-user', {
 
                 method: 'POST',
                 headers: {

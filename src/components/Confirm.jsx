@@ -44,7 +44,9 @@ const screeningCategories = [
 ];
 
 
-const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, backClicked, setBackClicked, setNextClicked }) => {
+
+
+const Confirm = ({setSelectedSection, screeningQuestionsMap, form, setForm, handleChange, errors, setErrors, validate, backClicked, setBackClicked, setNextClicked }) => {
     const [selectedSkills, setSelectedSkills] = useState(skillsList);
     const [showSeo, setShowSeo] = useState(false); // <-- Add this
     const [customQuestion, setCustomQuestion] = useState(form.customQuestion || "");
@@ -53,19 +55,57 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
     const [open, setOpen] = useState(false); // Add this for modal control
 
     const selectedCategories = form.screeningCategories || ["Education", "Background Check", "Hybrid Word"];
-    const handleCategoryClick = (category) => {
+    const handleCategoryClick = (categoryName) => {
+        setForm((prev) => {
+            const isSelected = prev.screeningCategories.some(item => item.category === categoryName);
+            if (isSelected) {
+                // If already selected, remove it
+                return {
+                    ...prev,
+                    screeningCategories: prev.screeningCategories.filter(
+                        (item) => item.category !== categoryName
+                    ),
+                };
+            } else {
+                // If not selected, add it with its question and default ideal answer
+                let newQuestion = '';
+                if (categoryName === "Custom Question") {
+                    newQuestion = ""; // Initialize custom question as empty
+                } else {
+                    newQuestion = screeningQuestionsMap[categoryName];
+                }
+
+                return {
+                    ...prev,
+                    screeningCategories: [
+                        ...(prev.screeningCategories || []),
+                        {
+                            category: categoryName,
+                            question: newQuestion,
+                            idealAnswer: "Yes", // Default ideal answer
+                            mustHave: false, // Default must-have status
+                        },
+                    ],
+                };
+            }
+        });
+    };
+
+    const handleRemoveCategory = (categoryName) => {
         setForm((prev) => ({
             ...prev,
-            screeningCategories: prev.screeningCategories?.includes(category)
-                ? prev.screeningCategories.filter((c) => c !== category)
-                : [...(prev.screeningCategories || []), category]
+            screeningCategories: prev.screeningCategories.filter(
+                (item) => item.category !== categoryName
+            ),
         }));
     };
 
-    const handleRemoveCategory = (category) => {
-        setForm((prev) => ({
-            ...prev,
-            screeningCategories: prev.screeningCategories.filter((c) => c !== category)
+    const handleScreeningQuestionChange = (categoryName, field, value) => {
+        setForm(prevForm => ({
+            ...prevForm,
+            screeningCategories: prevForm.screeningCategories.map(item =>
+                item.category === categoryName ? { ...item, [field]: value } : item
+            )
         }));
     };
 
@@ -191,18 +231,18 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
 
                         <Box>
                             {/* Render a ScreeningQuestionCard for each selected category */}
-                            {selectedCategories.map((category) => (
+                            {form.screeningCategories.map((item, index) => (
                                 <ScreeningQuestionCard
-                                    question={category === "Custom Question" ? customQuestion : category}
-                                    isCustom={category === "Custom Question"}
-                                    key={category}
-                                    onRemove={() => handleRemoveCategory(category)}
-                                    customValue={customQuestion}
-                                    onCustomChange={handleCustomQuestionChange}
-                                    handleIdealAnswerChange={handleIdealAnswerChange}
-                                    customidealAnswer={customidealAnswer}
-                                    form={form}
-                                    setForm={setForm}
+                                    key={item.category + index}
+                                    question={item.question}
+                                    isCustom={item.category === "Custom Question"}
+                                    customValue={item.category === "Custom Question" ? item.question : undefined}
+                                    idealAnswer={item.idealAnswer}
+                                    mustHave={item.mustHave}
+                                    onRemove={() => handleRemoveCategory(item.category)}
+                                    onCustomChange={(e) => handleScreeningQuestionChange(item.category, "question", e.target.value)}
+                                    onIdealAnswerChange={(e) => handleScreeningQuestionChange(item.category, "idealAnswer", e.target.value)}
+                                    onMustHaveChange={(e) => handleScreeningQuestionChange(item.category, "mustHave", e.target.checked)}
                                 />
                             ))}
                         </Box>
@@ -213,28 +253,34 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                                     Add screening questions:
                                 </Typography>
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                                    {screeningCategories.map((category) => (
-                                        <Button
-                                            key={category}
-                                            variant={selectedCategories.includes(category) ? "contained" : "outlined"}
-                                            color={selectedCategories.includes(category) ? "secondary" : "inherit"}
-                                            startIcon={selectedCategories.includes(category) ? "✓" : "+"}
-                                            onClick={() => handleCategoryClick(category)}
-                                            sx={{
-                                                borderRadius: 5,
-                                                textTransform: 'none',
-                                                fontWeight: 500,
-                                                background: selectedCategories.includes(category) ? "#222" : "transparent",
-                                                color: selectedCategories.includes(category) ? "#fff" : "#222",
-                                                borderColor: "#bbb",
-                                                px: 2,
-                                                py: 0.5,
-                                                minWidth: 0
-                                            }}
-                                        >
-                                            {category}
-                                        </Button>
-                                    ))}
+                                    {screeningCategories.map((category) => {
+                                        // Check if the current category name exists in any object's 'category' property
+                                        const isSelected = form.screeningCategories.some(item => item.category === category);
+
+                                        return (
+                                            <Button
+                                                key={category}
+                                                variant={isSelected ? "contained" : "outlined"}
+                                                color={isSelected ? "secondary" : "inherit"}
+                                                startIcon={isSelected ? "✓" : "+"}
+                                                onClick={() => handleCategoryClick(category)}
+                                                sx={{
+                                                    borderRadius: 5,
+                                                    textTransform: 'none',
+                                                    fontWeight: 500,
+                                                    // Apply styles based on isSelected
+                                                    background: isSelected ? "#222" : "transparent",
+                                                    color: isSelected ? "#fff" : "#222",
+                                                    borderColor: "#bbb",
+                                                    px: 2,
+                                                    py: 0.5,
+                                                    minWidth: 0
+                                                }}
+                                            >
+                                                {category}
+                                            </Button>
+                                        );
+                                    })}
                                 </Box>
                             </Grid>
                         </Grid>
@@ -445,7 +491,7 @@ const Confirm = ({ form, setForm, handleChange, errors, setErrors, validate, bac
                     </Grid>
                 </Grid>
             </Grid>
-            <Joblink open={open} onClose={() => setOpen(false)} jobLinks={jobLinks} />
+            <Joblink open={open} onClose={() => setOpen(false)} jobLinks={jobLinks} setSelectedSection={setSelectedSection} />
 
         </Box>
     );

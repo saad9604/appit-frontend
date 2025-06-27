@@ -19,6 +19,9 @@ import Divider from '@mui/material/Divider';
 import Autocomplete from '@mui/material/Autocomplete';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import logo from '../assets/logo.png'; // Assuming you have a logo image
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
+import { useNavigate } from 'react-router-dom';
 
 const skillsList = [
   'Ux Research', 'Interaction Design', 'Visual Design', 'Information Architecture',
@@ -31,10 +34,6 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [showSeo, setShowSeo] = useState(false); // <-- Add this
 
-  const requiredFields = [
-    'jobTitle', 'company', 'workType', 'jobLocation', 'jobType', 'description',
-    'metaTitle', 'url', 'metaDescription'
-  ];
 
   const handleClick = () => {
     if (validate()) {
@@ -42,6 +41,8 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
       setNextClicked(true);
     }
   }
+
+  const navigate = useNavigate();
 
 
 
@@ -52,102 +53,126 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
       <Grid container spacing={1}>
         <Grid item size={{ xs: 12, md: 8 }}>
 
-          <Paper elevation={4} sx={{ p: 3, borderRadius: '8px' }}>
+          <Paper elevation={5} sx={{ p: 2, borderRadius: '8px' }}>
             <Typography gutterBottom sx={{
               fontWeight: 600,
-              letterSpacing: '0.21px'
+              letterSpacing: '0.21px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
             }}>
+              <KeyboardBackspaceIcon onClick={() => navigate('/dashboard')} sx={{cursor:'pointer'}} />
               Post a Job
             </Typography>
             <Divider sx={{ mb: 2 }} />
+            <Typography variant="caption" color="text.secondary">
+              * indicates required
+            </Typography>
             <Typography gutterBottom sx={{
-              fontWeight: 500,
-              letterSpacing: '0.21px'
+              fontWeight: 'bold', mt: 2
             }}>Job Details*</Typography>
 
-            <Grid container spacing={2} sx={{ mt: 2 }}>
-              <Grid item size={{ xs: 12, md: 6 }}>
-                <label>
-                  Job Title <span style={{ color: 'red' }}>*</span>
-                  <input
-                    type="text"
-                    name="jobTitle"
-                    value={form.jobTitle}
-                    onChange={handleChange}
-                    style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-                  />
-                  {errors.jobTitle && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
+            <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+              <div style={{ flex: '1 1 45%' }}>
+                <label
+                  style={{
+                    color: 'grey',
+                    fontSize: '0.9rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    marginBottom: '4px',
+                  }}
+                >
+                  Job Title
+                  <span style={{ color: 'black' }}>
+                    <HelpOutlinedIcon sx={{ fontSize: '16px' }} />
+                  </span>
                 </label>
-              </Grid>
 
-              <Grid item size={{ xs: 12, sm: 6 }}>
-                <label>
+                <input
+                  type="text"
+                  name="jobTitle"
+                  value={form.jobTitle}
+                  onChange={handleChange}
+                  style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+                />
+                {errors.jobTitle && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
+              </div>
+
+              <div style={{ flex: '1 1 45%' }}>
+                <label style={{ color: 'grey', fontSize: '0.9rem', display: 'block', marginBottom: '4px' }}>
                   Company
-                  <input
-                    type="text"
-                    name="company"
-                    value={form.company}
-                    onChange={handleChange}
-                    style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-                  />
-                  {errors.company && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
                 </label>
-              </Grid>
-            </Grid>
-              
-            <Grid container spacing={2} sx={{ mt: 2 }}>
-               <Grid item size={{ xs: 12, sm: 6 }}>
-                <label>
+                <input
+                  type="text"
+                  name="company"
+                  value={form.company}
+                  onChange={handleChange}
+                  style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+                />
+                {errors.company && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
+              </div>
+            </div>
+
+            <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+              <div style={{ flex: '1 1 45%' }}>
+                <label style={{ color: 'grey', fontSize: '0.9rem', display: 'block', marginBottom: '4px' }}>
                   Work Type
-                  <select
-                    name="workType"
-                    value={form.workType}
-                    onChange={handleChange}
-                    style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-                  >
-                    <option value="">Select</option>
-                    <option value="On-site">On-site</option>
-                    <option value="Remote">Remote</option>
-                    <option value="Hybrid">Hybrid</option>
-                  </select>
-                  {errors.workType && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
                 </label>
-              </Grid>
+                <select
+                  name="workType"
+                  value={form.workType}
+                  onChange={handleChange}
+                  style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+                >
+                  <option value="">Select</option>
+                  <option value="On-site">On-site</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Hybrid">Hybrid</option>
+                </select>
+                {errors.workType && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
+              </div>
 
-              <Grid item size={{ xs: 12, sm: 6 }}>
-                <label>
-                  Job Location <span style={{ color: 'red' }}>*</span>
-                  <input
-                    type="text"
-                    name="jobLocation"
-                    value={form.jobLocation}
-                    onChange={handleChange}
-                    style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-                  />
-                  {errors.jobLocation && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
+              <div style={{ flex: '1 1 45%' }}>
+                <label style={{
+                  color: 'grey',
+                  fontSize: '0.9rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  marginBottom: '4px',
+                }}>
+                  Job Location <span style={{ color: 'black' }}> <HelpOutlinedIcon sx={{ fontSize: '16px' }} /></span>
                 </label>
-              </Grid>
-            </Grid>
-             
+                <input
+                  type="text"
+                  name="jobLocation"
+                  value={form.jobLocation}
+                  onChange={handleChange}
+                  style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+                />
+                {errors.jobLocation && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
+              </div>
+            </div>
 
-              <Grid item size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }}>
-                <label>
-                  Job Type
-                  <select
-                    name="jobType"
-                    value={form.jobType}
-                    onChange={handleChange}
-                    style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-                  >
-                    <option value="">Select</option>
-                    <option value="Full-time">Full-time</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Contract">Contract</option>
-                  </select>
-                  {errors.jobType && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
-                </label>
-              </Grid>
-            
+            <div style={{ marginTop: '16px', maxWidth: 'calc(50% - 8px)' }}>
+              <label style={{ color: 'grey', fontSize: '0.9rem', display: 'block', marginBottom: '4px' }}>
+                Job Type
+              </label>
+              <select
+                name="jobType"
+                value={form.jobType}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+              >
+                <option value="">Select</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+              </select>
+              {errors.jobType && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
+            </div>
 
 
             <Box mt={3}>
@@ -170,7 +195,7 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
             </Box>
 
             <Box mt={3}>
-              <Typography variant="subtitle1" gutterBottom>Description*</Typography>
+              <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: "bold" }}>Description*</Typography>
               <TextField
                 fullWidth
                 multiline
@@ -258,10 +283,11 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
                 <Button sx={{ textTransform: 'none' }}>Preview</Button>
               </Grid>
               <Grid item size={{ xs: 12, md: 8 }} justifyContent={'flex-end'} display="flex">
-                <Button sx={{ textTransform: 'none' }}>Back</Button>
+                <Button sx={{ textTransform: 'none', border: '1px solid #055087', borderRadius: '25px' }} onClick={() => navigate('/dashboard')}>Back</Button>
                 <Button
-                  sx={{ textTransform: 'none' }}
-                  onClick={handleClick}
+                  sx={{ textTransform: 'none', backgroundColor: "#055087", color: "#fff", borderRadius: '25px', padding: '5px 20px', ml: 2 }}
+                  onClick={() => navigate('/confirmjob')}
+
                 >
                   Next
                 </Button>

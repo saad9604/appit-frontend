@@ -3,11 +3,19 @@ import { Modal, Box, Typography, Button, Paper, InputAdornment, TextField, Stack
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close'; // Import Close icon
+import { useNavigate } from 'react-router-dom';
+const Joblink = ({ open, onClose, jobLinks, setSelectedSection }) => {
 
-const Joblink = ({ open, onClose, jobLinks }) => {
+  const navigate = useNavigate();
   const handleCopy = (link) => {
     navigator.clipboard.writeText(link);
   };
+
+  const handleJobsView = () => {
+    setSelectedSection('View Jobs');
+    onClose();
+    navigate('/dashboard');
+  }
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -115,6 +123,7 @@ const Joblink = ({ open, onClose, jobLinks }) => {
               textTransform: 'none',
               mt: 2
             }}
+            onClick={handleJobsView}
           >
             View all Jobs
           </Button>
