@@ -473,6 +473,7 @@ const ConfirmJob = ({setSelectedSection , screeningQuestionsMap, form, setForm, 
                                 <Button onClick={() => {
                                     setNextClicked(false)
                                     setBackClicked(true);
+                                    navigate('/postjob')
                                 }}sx={{ textTransform: 'none', border: '1px solid #055087', borderRadius: '25px' }}>Back</Button>
                                 <Button
                                     sx={{ textTransform: 'none', backgroundColor: "#055087", color: "#fff", borderRadius: '25px', padding: '5px 20px', ml: 2 }}
