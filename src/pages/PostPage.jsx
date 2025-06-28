@@ -50,7 +50,7 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
         ...prev,
         jobTitle: !form.jobTitle,
         company: !form.company,
-        jobLocation:!form.jobLocation
+        jobLocation: !form.jobLocation
       }));
       return;
     }
@@ -65,7 +65,7 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
         body: JSON.stringify({
           jobTitle: form.jobTitle,
           company: form.company,
-          location:form.jobLocation
+          location: form.jobLocation
         }),
       });
 
@@ -91,6 +91,25 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
   const navigate = useNavigate();
 
 
+  const handleBack = () => {
+    setForm({
+      jobTitle: '',
+      company: '',
+      workType: 'On-site',
+      jobLocation: '',
+      jobType: 'Full-time',
+      description: '',
+      metaTitle: '',
+      url: '',
+      metaDescription: '',
+      filterOut: false,
+      platform: "",
+      customQuestion: "",
+      selectedSkills: [],
+      screeningCategories: [],
+    });
+    navigate('/dashboard')
+  };
 
   return (
     <Box sx={{ p: 5 }}>
@@ -337,7 +356,7 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
                 <Button sx={{ textTransform: 'none' }}>Preview</Button>
               </Grid>
               <Grid item size={{ xs: 12, md: 8 }} justifyContent={'flex-end'} display="flex">
-                <Button sx={{ textTransform: 'none', border: '1px solid #055087', borderRadius: '25px' }} onClick={() => navigate('/dashboard')}>Back</Button>
+                <Button sx={{ textTransform: 'none', border: '1px solid #055087', borderRadius: '25px' }} onClick={handleBack}>Back</Button>
                 <Button
                   sx={{ textTransform: 'none', backgroundColor: "#055087", color: "#fff", borderRadius: '25px', padding: '5px 20px', ml: 2 }}
                   onClick={() => navigate('/confirmjob')}

@@ -87,6 +87,24 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
   };
 
 
+const handleBack = () => {
+  setForm({
+    jobTitle: '',
+    company: '',
+    workType: 'On-site',
+    jobLocation: '',
+    jobType: 'Full-time',
+    description: '',
+    metaTitle: '',
+    url: '',
+    metaDescription: '',
+    filterOut: false,
+    platform: "",
+    customQuestion: "",
+    selectedSkills: [],
+    screeningCategories: [],
+  });
+};
 
 
   return (
@@ -116,7 +134,7 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
                   <input
                     type="text"
                     name="jobTitle"
-                    value={form.jobTitle}
+                    value={form.jobTitle || ""}
                     onChange={handleChange}
                     style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
                   />
@@ -320,7 +338,7 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
                 <Button sx={{ textTransform: 'none' }}>Preview</Button>
               </Grid>
               <Grid item size={{ xs: 12, md: 8 }} justifyContent={'flex-end'} display="flex">
-                <Button sx={{ textTransform: 'none' }}>Back</Button>
+                <Button sx={{ textTransform: 'none' }} onClick={handleBack}>Back</Button>
                 <Button
                   sx={{ textTransform: 'none' }}
                   onClick={handleClick}
