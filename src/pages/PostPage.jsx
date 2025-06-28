@@ -189,27 +189,13 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
                   name="workType"
                   value={form.workType}
                   onChange={handleChange}
-                  style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    boxSizing: 'border-box'
-                  }}
+                  style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
                 >
                   <option value="">Select</option>
-                  <option value="Full Time">Full Time</option>
-                  <option value="Part Time">Part Time</option>
-                  <option value="Contract">Contract</option>
-                  <option value="Freelance">Freelance</option>
-                  <option value="Internship">Internship</option>
-                  <option value="Temporary">Temporary</option>
+                  <option value="On-site">On-site</option>
                   <option value="Remote">Remote</option>
                   <option value="Hybrid">Hybrid</option>
-                  <option value="On-Site">On-Site</option>
-                  <option value="Consultant">Consultant</option>
                 </select>
-
                 {errors.workType && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
               </div>
 
@@ -246,9 +232,16 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
                 style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
               >
                 <option value="">Select</option>
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
+                <option value="Full Time">Full Time</option>
+                <option value="Part Time">Part Time</option>
                 <option value="Contract">Contract</option>
+                <option value="Freelance">Freelance</option>
+                <option value="Internship">Internship</option>
+                <option value="Temporary">Temporary</option>
+                <option value="Remote">Remote</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="On-Site">On-Site</option>
+                <option value="Consultant">Consultant</option>
               </select>
               {errors.jobType && <div style={{ color: 'red', fontSize: '12px' }}>Required</div>}
             </div>
