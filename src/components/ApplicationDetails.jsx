@@ -115,36 +115,28 @@ const ApplicationDetails = ({ setApplicationDetailsClicked, currentApplicantDeta
                 <Box mt={4}>
                     <Typography variant="h6" gutterBottom>Answered Questions</Typography>
                     <Grid container spacing={2}>
-                        {applicant.screening_categories?.map((cat, index) => {
-                            let parsed;
-                            try {
-                                parsed = JSON.parse(cat);
-                            } catch (e) {
-                                return null;
-                            }
+                        {applicant.screening_answers && Object.entries(applicant.screening_answers).map(([question, answer], index) => (
+                            <Grid item size={{xs:12 , sm:6}} key={index}>
+                                <Paper
+                                    elevation={1}
+                                    sx={{
+                                        backgroundColor: '#e6f0ff',
+                                        borderRadius: 2,
+                                        p: 2,
+                                        height: '100%',
+                                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+                                    }}
+                                >
+                                    <Typography fontWeight="bold" gutterBottom>
+                                        {index + 1}. {question}
+                                    </Typography>
+                                    <Typography>
+                                        <span style={{fontWeight:'bold'}}>Ans:</span> {answer || 'N/A'}
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        ))}
 
-                            return (
-                                <Grid item size={{xs:12 ,sm:6}} key={index}>
-                                    <Paper
-                                        elevation={1}
-                                        sx={{
-                                            backgroundColor: '#e6f0ff',
-                                            borderRadius: 2,
-                                            p: 2,
-                                            height: '100%',
-                                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-                                        }}
-                                    >
-                                        <Typography fontWeight="bold" gutterBottom>
-                                            {index + 1}. {parsed.question}
-                                        </Typography>
-                                        <Typography>
-                                            Ans :- {parsed.idealAnswer || 'N/A'}
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                            );
-                        })}
                     </Grid>
                 </Box>
 
