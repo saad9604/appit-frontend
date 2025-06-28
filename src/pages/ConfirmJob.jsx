@@ -129,7 +129,19 @@ const ConfirmJob = ({ setSelectedSection, screeningQuestionsMap, form, setForm, 
 
     const postJob = async () => {
         try {
-            setForm({
+            
+            if (validate()) {
+                console.log('Posting job with form data:', form);
+                // const response = await axios.post('http://localhost:5000/post-job', form);
+                const response = await axios.post('https://appit-backend-wb0d.onrender.com/post-job', form);
+
+                console.log('Response from server:', response.data);
+                if (response.data.success === true) {
+                    console.log('Job posted successfully:', response.data);
+                    setOpen(true); // Show modal on success
+                }
+
+                setForm({
                 jobTitle: '',
                 company: '',
                 workType: 'On-site',
@@ -145,16 +157,6 @@ const ConfirmJob = ({ setSelectedSection, screeningQuestionsMap, form, setForm, 
                 selectedSkills: [],
                 screeningCategories: [],
             });
-            if (validate()) {
-                console.log('Posting job with form data:', form);
-                // const response = await axios.post('http://localhost:5000/post-job', form);
-                const response = await axios.post('https://appit-backend-wb0d.onrender.com/post-job', form);
-
-                console.log('Response from server:', response.data);
-                if (response.data.success === true) {
-                    console.log('Job posted successfully:', response.data);
-                    setOpen(true); // Show modal on success
-                }
             }
         } catch (error) {
             console.error('Failed to post job:', error);
