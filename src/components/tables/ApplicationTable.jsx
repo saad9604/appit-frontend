@@ -88,17 +88,18 @@ export default function ApplicationTable({ setJobIDCopy, jobIDCopy, jobID, setJo
 
     // Effect to fetch applications when jobID changes
     useEffect(() => {
+        console.log("ApplicationTable mounted or jobID changed. Current jobID:", jobID);
         if (jobID) {
-            console.log("Job ID is set, fetching applications for job ID:", jobID);
+            console.log("Fetching applications for specific Job ID:", jobID);
             getJobsApplications(jobID);
         } else {
-            console.log("Job ID is not set, fetching all applications.");
+            console.log("Job ID is not specified, fetching all applications.");
             getAllApplications();
         }
-        // Reset selection and delete mode when jobID changes
+        // Reset selection and delete mode when jobID changes or component mounts
         setSelectedRows([]);
         setIsDeleteMode(false);
-    }, [jobID]);
+    }, [jobID]); 
 
 
     const filteredApps = applications.filter((app) =>

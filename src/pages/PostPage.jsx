@@ -22,6 +22,7 @@ import logo from '../assets/logo.png'; // Assuming you have a logo image
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
 import { useNavigate } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const skillsList = [
   'Ux Research', 'Interaction Design', 'Visual Design', 'Information Architecture',
@@ -33,6 +34,7 @@ const skillsList = [
 const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [showSeo, setShowSeo] = useState(false); // <-- Add this
+  const [aiLoading, setAiLoading] = useState(false);
 
 
   const handleClick = () => {
@@ -41,6 +43,50 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
       setNextClicked(true);
     }
   }
+
+  const generateDescription = async () => {
+    if (!form.jobTitle || !form.company || !form.jobLocation) {
+      setErrors((prev) => ({
+        ...prev,
+        jobTitle: !form.jobTitle,
+        company: !form.company,
+        jobLocation:!form.jobLocation
+      }));
+      return;
+    }
+
+    try {
+      setAiLoading(true);
+      const response = await fetch('http://localhost:5000/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jobTitle: form.jobTitle,
+          company: form.company,
+          location:form.jobLocation
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data?.reply) {
+        setForm((prev) => ({
+          ...prev,
+          description: data.reply,
+        }));
+
+        console.log("ai response", data?.reply);
+      } else {
+        console.error("Unexpected response:", data);
+      }
+    } catch (error) {
+      console.error("AI generation failed:", error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -61,7 +107,7 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
               alignItems: 'center',
               gap: '8px'
             }}>
-              <KeyboardBackspaceIcon onClick={() => navigate('/dashboard')} sx={{cursor:'pointer'}} />
+              <KeyboardBackspaceIcon onClick={() => navigate('/dashboard')} sx={{ cursor: 'pointer' }} />
               Post a Job
             </Typography>
             <Divider sx={{ mb: 2 }} />
@@ -178,19 +224,27 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
             <Box mt={3}>
               <Button
                 variant="contained"
+                onClick={generateDescription}
+                disabled={aiLoading}
                 sx={{
                   background: 'linear-gradient(90deg, #2931EF 0%, #C219C0 100%)',
                   borderRadius: '8px',
                   color: '#fff',
                   boxShadow: 'none',
                   textTransform: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
                   '&:hover': {
                     background: 'linear-gradient(90deg, #2931EF 0%, #C219C0 100%)',
                     opacity: 0.95,
                   },
                 }}
               >
-                Write Description with AI
+                <span style={{ color: '#fff' }}>
+                  {aiLoading ? 'Generating...' : 'Write Description with AI'}
+                </span>
+                {aiLoading && <CircularProgress size={18} color="inherit" />}
               </Button>
             </Box>
 

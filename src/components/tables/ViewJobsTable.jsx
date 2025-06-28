@@ -62,13 +62,9 @@ export default function ViewJobsTable({ setJobIDCopy ,jobIDCopy, jobID, setJobID
         job.job_title.toLowerCase().includes(search.toLowerCase())
     );
 
-    const handleViewClick = (jobId) => {
-        // Set the job ID
-        setJobID(jobId);
-        // Immediately set the section to 'Applications' since we intend to view them
-        setSelectedSection('Applications');
-        // No need for the `if(jobID)` check here, as we are explicitly setting it
-        console.log("Navigating to applications for Job ID:", jobId);
+     const handleViewClick = (jobId) => {
+        setJobID(jobId); // Set the actual job ID here
+    
     };
 
     const handleCopy = (job) => {

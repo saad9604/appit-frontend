@@ -30,6 +30,7 @@ const skillsList = [
 const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, handleChange, errors, setErrors, validate }) => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [showSeo, setShowSeo] = useState(false); // <-- Add this
+  const [aiLoading, setAiLoading] = useState(false);
 
   const requiredFields = [
     'jobTitle', 'company', 'workType', 'jobLocation', 'jobType', 'description',
@@ -42,6 +43,49 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
       setNextClicked(true);
     }
   }
+
+  const generateDescription = async () => {
+    if (!form.jobTitle || !form.company) {
+      setErrors((prev) => ({
+        ...prev,
+        jobTitle: !form.jobTitle,
+        company: !form.company,
+      }));
+      return;
+    }
+
+    try {
+      setAiLoading(true);
+      const response = await fetch('http://localhost:5000/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jobTitle: form.jobTitle,
+          company: form.company,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data?.reply) {
+        setForm((prev) => ({
+          ...prev,
+          description: data.reply,
+        }));
+
+        console.log("ai response" , data?.reply);
+      } else {
+        console.error("Unexpected response:", data);
+      }
+    } catch (error) {
+      console.error("AI generation failed:", error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
 
 
 
@@ -168,6 +212,8 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
             <Box mt={3}>
               <Button
                 variant="contained"
+                onClick={generateDescription}
+                disabled={aiLoading}
                 sx={{
                   background: 'linear-gradient(90deg, #2931EF 0%, #C219C0 100%)',
                   borderRadius: '8px',
@@ -180,8 +226,9 @@ const Post = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, hand
                   },
                 }}
               >
-                Write Description with AI
+                {aiLoading ? 'Generating...' : 'Write Description with AI'}
               </Button>
+
             </Box>
 
             <Box mt={3}>
