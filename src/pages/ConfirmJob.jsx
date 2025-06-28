@@ -49,7 +49,7 @@ const screeningCategories = [
 
 
 
-const ConfirmJob = ({setSelectedSection , screeningQuestionsMap, form, setForm, handleChange, errors, setErrors, validate, backClicked, setBackClicked, setNextClicked }) => {
+const ConfirmJob = ({ setSelectedSection, screeningQuestionsMap, form, setForm, handleChange, errors, setErrors, validate, backClicked, setBackClicked, setNextClicked }) => {
     const [selectedSkills, setSelectedSkills] = useState(skillsList);
     const [showSeo, setShowSeo] = useState(false); // <-- Add this
     const [customQuestion, setCustomQuestion] = useState(form.customQuestion || "");
@@ -129,6 +129,22 @@ const ConfirmJob = ({setSelectedSection , screeningQuestionsMap, form, setForm, 
 
     const postJob = async () => {
         try {
+            setForm({
+                jobTitle: '',
+                company: '',
+                workType: 'On-site',
+                jobLocation: '',
+                jobType: 'Full-time',
+                description: '',
+                metaTitle: '',
+                url: '',
+                metaDescription: '',
+                filterOut: false,
+                platform: "",
+                customQuestion: "",
+                selectedSkills: [],
+                screeningCategories: [],
+            });
             if (validate()) {
                 console.log('Posting job with form data:', form);
                 // const response = await axios.post('http://localhost:5000/post-job', form);
@@ -174,7 +190,7 @@ const ConfirmJob = ({setSelectedSection , screeningQuestionsMap, form, setForm, 
                             letterSpacing: '0.21px',
                         }}
                         >
-                            <KeyboardBackspaceIcon onClick={() => navigate('/postjob')} sx={{cursor:'pointer'}} />
+                            <KeyboardBackspaceIcon onClick={() => navigate('/postjob')} sx={{ cursor: 'pointer' }} />
                             Confirm Job Settings
                         </Typography>
                         <Divider sx={{ mb: 3 }} />
@@ -249,12 +265,14 @@ const ConfirmJob = ({setSelectedSection , screeningQuestionsMap, form, setForm, 
                             >
                                 <label
                                     htmlFor="emailAddress"
-                                    style={{  color: 'grey',
+                                    style={{
+                                        color: 'grey',
                                         fontSize: '0.9rem',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '4px',
-                                        marginBottom: '4px', }}
+                                        marginBottom: '4px',
+                                    }}
                                 >
                                     Email Address
                                 </label>
@@ -368,14 +386,14 @@ const ConfirmJob = ({setSelectedSection , screeningQuestionsMap, form, setForm, 
 
                             <Grid container alignItems={"center"} spacing={2}>
                                 {/* Platform selection title */}
-                                <Grid item size={{xs:12, sm:6}} mt={2}>
+                                <Grid item size={{ xs: 12, sm: 6 }} mt={2}>
                                     <Typography variant="subtitle2" fontWeight="bold">
                                         Select the platform you’d like to post this job on:
                                     </Typography>
                                 </Grid>
 
                                 {/* Radio group for platform selection */}
-                                <Grid item size={{xs:12}} sx={{display: 'flex', justifyContent: 'space-between' }}>
+                                <Grid item size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <FormControl required error={!form.platform}>
                                         <RadioGroup
                                             row
@@ -474,7 +492,7 @@ const ConfirmJob = ({setSelectedSection , screeningQuestionsMap, form, setForm, 
                                     setNextClicked(false)
                                     setBackClicked(true);
                                     navigate('/postjob')
-                                }}sx={{ textTransform: 'none', border: '1px solid #055087', borderRadius: '25px' }}>Back</Button>
+                                }} sx={{ textTransform: 'none', border: '1px solid #055087', borderRadius: '25px' }}>Back</Button>
                                 <Button
                                     sx={{ textTransform: 'none', backgroundColor: "#055087", color: "#fff", borderRadius: '25px', padding: '5px 20px', ml: 2 }}
                                     onClick={postJob}
@@ -549,7 +567,7 @@ const ConfirmJob = ({setSelectedSection , screeningQuestionsMap, form, setForm, 
                     </Grid>
                 </Grid>
             </Grid>
-            <Joblink open={open} onClose={() => setOpen(false)} jobLinks={jobLinks} setSelectedSection={setSelectedSection}/>
+            <Joblink open={open} onClose={() => setOpen(false)} jobLinks={jobLinks} setSelectedSection={setSelectedSection} />
 
         </Box>
     );
