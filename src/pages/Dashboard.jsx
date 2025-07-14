@@ -3,6 +3,8 @@ import {
     Box, Drawer, CssBaseline, Toolbar, List, Divider, ListItem,
     ListItemButton, ListItemIcon, ListItemText, Typography, Button
 } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import WorkIcon from '@mui/icons-material/Work';
@@ -107,6 +109,9 @@ export default function Dashboard({
         setSelectedSection('Applications'); // Ensure we are in the Applications section
         setApplicationDetailsClicked(false); // Ensure application details are not shown
     };
+
+    const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+
 
 
     return (
@@ -247,13 +252,14 @@ export default function Dashboard({
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={() => setLogoutDialogOpen(true)}>
                             <ListItemIcon>
                                 <LogoutIcon />
                             </ListItemIcon>
                             <ListItemText primary="Log Out" />
                         </ListItemButton>
                     </ListItem>
+
                 </List>
             </Drawer>
 
@@ -281,8 +287,8 @@ export default function Dashboard({
                             setApplicationDetailsClicked={setApplicationDetailsClicked}
                             setCurrentApplicantDetails={setCurrentApplicantDetails}
                             currentApplicantDetails={currentApplicantDetails}
-                            // You might want a way to "go back" from specific job applications
-                            // For example, a button in ApplicationTable that calls setJobID(null)
+                        // You might want a way to "go back" from specific job applications
+                        // For example, a button in ApplicationTable that calls setJobID(null)
                         />
                     )
                 ) : selectedSection === 'Create User' ? (
@@ -298,6 +304,45 @@ export default function Dashboard({
                     )
                 ) : null} {/* Fallback for unhandled sections */}
             </Box>
+            <Dialog
+                open={logoutDialogOpen}
+                onClose={() => setLogoutDialogOpen(false)}
+                PaperProps={{
+                    sx: {
+                        borderRadius: 3,
+                        padding: 2,
+                    }
+                }}
+            >
+                <DialogTitle>Confirm Logout</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to log out?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions sx={{ px: 3, pb: 2 }}>
+                    <Button onClick={() => setLogoutDialogOpen(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            sessionStorage.clear();
+                            navigate('/');
+                        }}
+                        sx={{
+                            backgroundColor: '#055087',
+                            '&:hover': {
+                                backgroundColor: '#033f68',
+                            }
+                        }}
+                        variant="contained"
+                    >
+                        Yes, Log Out
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
         </Box>
     );
 }
