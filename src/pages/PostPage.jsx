@@ -57,7 +57,7 @@ const PostPage = ({ setBackClicked, nextClicked, setNextClicked, form, setForm, 
 
     try {
       setAiLoading(true);
-      const response = await fetch('http://localhost:5000/ask', {
+      const response = await fetch('https://appit-backend-wb0d.onrender.com/ask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
